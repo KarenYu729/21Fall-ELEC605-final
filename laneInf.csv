@@ -1,0 +1,151 @@
+﻿latitude,longtitude,freq,road1,road2,road1lane,road2lane,find_the_location,type,ID_Num
+40.861862,-73.91282,478,West Fordham Road,Major Deegan Expressway,3,3,"University Heights, Bronx, NY",expressway,1
+40.8571285,-73.8807926,319,East Fordham Road,Sourthern Boulevard,3,3,"Bronx Zoo, Southern Boulevard, Bronx, NY",expressway,2
+40.820305,-73.89083,429,Hunts Point Avenue,Bruckner Boulevard,2,4,"Hunts Point Avenue & Southern Boulevard, Bronx, NY",expressway,3
+40.820189,-73.8906752,334,Hunts Point Avenue,Bruckner Expressway,2,2,"East Fordham Road & Southern Boulevard, Bronx, NY",expressway,4
+40.816864,-73.882744,405,Edgewater Road,,2,,Hunts Point Produce Market,market parking,5
+40.8100528,-73.9251435,329,East 138th Street,Alexander Avenue,2,2,"St. Jerome Roman Catholic Church, Alexander Avenue, Bronx, NY",intersection,6
+40.7832478,-73.9447234,313,East 96th Street,1st Avenue,4,4,"Stanley Isaacs Playground, FDR Drive, New York, NY",intersection,7
+40.7615508,-73.9665842,311,East 59th Street,3rd Avenue,3,6,"E 59 St/3 Av, New York, NY",intersection,8
+40.7602226,-73.967462,353,East 57th Street,3rd Avenue,3,6,"Duane Reade, 3rd Avenue, New York, NY",intersection,9
+40.759308,-73.9652931,332,East 57th Street,2nd Avenue,3,5,"East 57th Street & 2nd Avenue, New York, NY",intersection,10
+40.7606,-73.96434,320,East 59th Street,2nd Avenue,3,4,"Tramway Plaza, East 60th Street, New York, NY",intersection,11
+40.7606005,-73.9643142,472,Ed Koch Queensboro Bridge Lower Roadway,2nd Avenue,2,4,"Tramway Plaza, East 60th Street, New York, NY",intersection,12
+40.759514,-73.99926,339,West 40th Street,11th Avenue,2,3,"NY-495, New York, NY",intersection,13
+40.7595273,-73.999242,334,West 40th Street,11th Avenue,2,3,"NY-495, New York, NY",intersection,14
+40.75898,-73.99595,351,West 41st Street,10th Avenue,2,6,"Sts. Cyril & Methodius & St. Raphael's Catholic Church Croatian Parish, West 41st Street, New York, NY",intersection,15
+40.7584292,-73.9926328,350,West 42nd Street,9th Avenue,2,4,"At Nine Restaurant & Bar, 9th Avenue, New York, NY",intersection,16
+40.7572323,-73.9897922,455,West 42nd Street,8th Avenue,3,4,"Microsoft Technology Center, Times Square, New York, NY",intersection,17
+40.7560353,-73.9869481,317,West 42nd Street,7th Avenue,3,5,"200 West 42nd Street, New York, NY",intersection,18
+40.7509908,-73.9906233,347,West 34th Street,7th Avenue,2,5,34th Street Penn Station,intersection,19
+40.7460781,-73.9749359,322,East 36th Street,2nd Avenue,4,6,"Royal Tuina, East 36th Street, New York, NY",intersection,20
+40.7241363,-73.9926041,324,East Houston Street,Bowery,4,3,"310 Bowery Bar, Bowery, New York, NY",intersection,21
+40.7203211,-73.9940403,368,Delancey Street,Bowery,2,3,"Bowery & Kenmare Street, New York, NY",intersection,22
+40.733536,-73.87035,364,Queens Boulevard,Woodhaven Boulevard,4,5,"Hoffman Drive & Woodhaven Boulevard, Queens, NY",intersection,23
+40.7334973,-73.8703694,354,Queens Boulevard,Woodhaven Boulevard,3,4,"Hoffman Drive & Woodhaven Boulevard, Queens, NY",intersection,24
+40.696033,-73.98453,514,Tillary Street,Flatbush Avenue Extension,5,4,"The Tillary Hotel, Flatbush Avenue Extension, Brooklyn, NY",intersection,25
+40.6960346,-73.9845292,585,Tillary Street,Flatbush Avenue Extension,4,4,"The Tillary Hotel, Flatbush Avenue Extension, Brooklyn, NY",intersection,26
+40.6757357,-73.8968533,433,Atlantic Avenue,Pennsylvania Avenue,5,3,"Atlantic Avenue & Pennsylvania Avenue, Brooklyn, NY",intersection,27
+40.6585778,-73.8906229,417,Linden Boulevard,Pennsylvania Avenue,5,4,"Bethlehem Baptist Church, Linden Boulevard, Brooklyn, NY",intersection,28
+40.6528929,-73.8667311,311,Gateway Drive,Erskine Street,4,4,"Spring Creek Park, Belt Parkway, Howard Beach, NY",intersection,29
+40.65616,-73.76736,311,Rockaway Boulevard,North Boundary Road,4,2,"150th Road, Springfield Gardens, NY",intersection,30
+40.86186,-73.9137392,275,West Fordham Road,Major Deegan Expressway,3,2,"University Heights, Bronx, NY",intersection,31
+40.8137456,-73.9313928,263,East 138th Street,Exterior Street,4,2,"Madison Avenue Bridge, New York, NY",intersection,32
+40.8027515,-73.933575,287,East 125th Street,2nd Avenue,3,6,"East 125th Street & 2nd Avenue, New York, NY",intersection,33
+40.7631141,-73.9625151,271,East 63rd Street,2nd Avenue,3,5,"2 Av/E 64 St, New York, NY",intersection,34
+40.7643229,-73.977196,269,West 57th Street,6th Avenue,3,5,"West 57th Street & 6th Avenue, New York, NY",intersection,35
+40.762025,-74.0011515,257,West 42nd Street,12th Avenue,3,5,"West 42nd Street & 12th Avenue, New York, NY",intersection,36
+40.760822,-73.99832,294,West 42nd Street,11th Avenue,3,3,"W 42 St/11 Av, New York, NY",intersection,37
+40.7608228,-73.9983142,278,West 42nd Street,11th Avenue,4,3,"W 42 St/11 Av, New York, NY",intersection,38
+40.759626,-73.9954735,266,West 42nd Street,10th Avenue,3,5,"West 42nd Street & 10th Avenue, New York, NY",intersection,39
+40.7548409,-73.9841185,292,West 42nd Street,6th Avenue,3,5,"West 42nd Street & 6th Avenue, New York, NY",intersection,40
+40.7476292,-73.9767362,277,East 37th Street,3rd Avenue,4,5,"Romanian Cultural Institute, East 38th Street, New York, NY",intersection,41
+40.7521904,-73.9934636,259,West 34th Street,8th Avenue,3,4,"34 St - Penn Station, New York, NY",intersection,42
+40.74478,-73.9758819,298,East 34th Street,2nd Avenue,3,4,"East 34th Street & 2nd Avenue, New York, NY",intersection,43
+40.7502939,-73.9948425,284,West 31th Street,8th Avenue,3,4,"Madison Square Garden, Pennsylvania Plaza, New York, NY",intersection,44
+40.724136,-73.992615,256,East Houston Street,Bowery,4,3,"East Houston Street & Bowery, New York, NY",intersection,45
+40.72032,-73.99404,293,Delancey Street,Bowery,3,3,"Kings Avenue Tattoo, Bowery, NYC, NY",intersection,46
+40.7199725,-73.9928968,259,Delancey Street,Chrystie Street,3,3,"Dixon Place, Chrystie Street, New York, NY",intersection,47
+40.7193963,-74.0018831,282,Broadway,Canal Street,3,3,"David Lewis, Walker Street, New York, NY",intersection,48
+40.696197,-73.9887629,275,Tillary Street,Brooklyn Bridge Boulevard,4,4,"Tillary Street & Adams Street, Brooklyn, NY",intersection,49
+40.6840525,-73.9774579,281,Atlantic Avenue,Flatbush Avenue,3,2,"Atlantic Center, Atlantic Avenue, Brooklyn, NY",intersection,50
+40.678723,-73.9529869,263,Atlantic Avenue,Bedford Avenue,3,3,"Armory Men’s Shelter, Bedford Avenue, Brooklyn, NY",intersection,51
+40.67619,-73.9081,257,Atlantic Avenue,Eastern Parkway,3,3,"Hadi Medical Group - Brooklyn, Eastern Parkway, Brooklyn, NY",intersection,52
+40.6761899,-73.9080899,255,Atlantic Avenue,Eastern Parkway,3,3,"Hadi Medical Group - Brooklyn, Eastern Parkway, Brooklyn, NY",intersection,53
+40.6781627,-73.8974769,286,Bushwick Avenue,Jamaica Avenue,2,3,"MTA NYCT East New York Yard, Bushwick Avenue, Brooklyn, NY",intersection,54
+40.675735,-73.89686,307,Atlantic Avenue,Pennsylvania Avenue,5,3,"Atlantic Avenue & Pennsylvania Avenue, Brooklyn, NY",intersection,55
+40.680015,-73.8774282,302,Atlantic Avenue,Logan Street,3,3,"Atlantic Avenue & Milford Street, Brooklyn, NY",intersection,56
+40.677654,-73.82866,269,Rockaway Boulevard,,2,,"Rockaway Boulevard & 111th Street, Queens, NY",parking,57
+40.66612,-73.82225,266,North Conduit Avenue,Lefferts Boulevard,4,2,"Lefferts Playground, North Conduit Avenue, South Ozone Park, NY",intersection,58
+40.6687978,-73.9311201,282,Eastern Parkway,Utica Avenue,2,2,"Eastern Parkway & Utica Avenue, Brooklyn, NY",intersection,59
+40.6631828,-73.9624487,284,Flatbush Avenue,Empire Boulevard,2,2,"Flatbush Avenue & Empire Boulevard, Brooklyn, NY",intersection,60
+40.8786453,-73.871598,247,East Gun Hill Road,Webster Avenue,3,3,"Webster Avenue & East Gun Hill Road, Bronx, NY",intersection,61
+40.87831,-73.870155,241,East Gun Hill Road,Bronx River Parkway,3,2,"Webster Avenue & East Gun Hill Road, Bronx, NY",intersection,62
+40.8687708,-73.8317333,239,Bartow Avenue,Baychester Avenue,4,2,"Baychester Avenue & Aldrich Street, Bronx, NY",intersection,63
+40.8481201,-73.9308839,228,Washington Bridge,Amsterdam Avenue ,3,3,"Amsterdam Avenue & West 181st Street, New York, NY",intersection,64
+40.8133899,-73.9562587,248,West 125th Street,Amsterdam Avenue,3,3,"Amsterdam Avenue & West 125th Street, New York, NY",intersection,65
+40.8077723,-73.9454833,234,West 125th Street,Malcolm X Boulevard,3,2,"West 125th Street & Malcolm X Boulevard, New York, NY",intersection,66
+40.7629663,-73.9739693,237,East 57th Street,5th Avenue,2,3,"The Blue Box Cafe – 5th Ave, 5th Avenue, New York, NY",intersection,67
+40.76155,-73.96659,240,East 59th Street,3rd Avenue,3,4,"E 59 St/3 Av, New York, NY",intersection,68
+40.7605353,-73.9583509,233,East 62nd Street,York Avenue,3,2,"York Avenue & East 64th Street, New York, NY",intersection,69
+40.7591997,-73.9846193,241,West 47th Street,7th Avenue,2,4,"W New York - Times Square, Broadway, New York, NY",intersection,70
+40.758981,-73.9959428,237,West 41st Street,10th Avenue,5,5,"Sts. Cyril & Methodius & St. Raphael's Catholic Church Croatian Parish, West 41st Street, New York, NY",intersection,71
+40.7589782,-73.9939358,253,West 42nd Street,Dyer Avenue,2,3,"Sts. Cyril & Methodius & St. Raphael's Catholic Church Croatian Parish, West 41st Street, New York, NY",intersection,72
+40.7534818,-73.9808885,230,East 42nd Street,5th Avenue,4,3,"W 42 St/5 Av, New York, NY",intersection,73
+40.754584,-73.9991446,239,West 34th Street,10th Avenue,3,4,"West 34th Street & 10th Avenue, New York, NY",intersection,74
+40.7457274,-73.9781227,250,East 34th Street,3rd Avenue,3,6,"East 34th Street & 3rd Avenue, New York, NY",intersection,75
+40.7429104,-73.9928041,235,West 23rd Street,6th Avenue,2,6,"Poster House, West 23rd Street, New York, NY",intersection,76
+40.7373607,-73.996839,236,West 14th Street,6th Avenue,2,6,"6th Avenue & West 15th Street, New York, NY",intersection,77
+40.7185558,-73.9882,241,Delancey Street,Essex Street,3,2,"Regal Essex Crossing & RPX, Delancey Street, New York, NY",intersection,78
+40.7184302,-74.0005303,253,Canal Street,Lafayette Street,3,3,"Renew Regal Spa, Canal Street, New York, NY",intersection,79
+40.748924,-73.937386,246,Jackson Avenue,Queens Plaza South,3,2,"28-30 Jackson Avenue, Long Island City, NY",intersection,80
+40.696198,-73.98869,234,Tillary Street,Adams Street,4,3,"Tillary Street & Adams Street, Brooklyn, NY",intersection,81
+40.6774132,-73.9303181,243,Atlantic Avenue,Utica Avenue,3,3,"Atlantic Avenue & Utica Avenue, Brooklyn, NY",intersection,82
+40.6685062,-73.9256052,228,Eastern Parkway,Buffalo Avenue,5,2,"Eastern Parkway & Buffalo Avenue, Brooklyn, NY",intersection,83
+40.658577,-73.89063,249,Linden Boulevard,Pennsylvania Avenue,5,2,"Bethlehem Baptist Church, Linden Boulevard, Brooklyn, NY",intersection,84
+40.667114,-73.834656,251,North Conduit Avenue,Hawtree Street,5,2,"Cohancy Street & 155th Avenue, Queens, NY",intersection,85
+40.6596509,-73.7738282,238,Rockaway Boulevard,Farmers Boulevard,4,3,"Farmers Boulevard & Rockaway Boulevard, Queens, NY",intersection,86
+40.65965,-73.773834,247,Rockaway Boulevard,Farmers Boulevard,4,3,"Farmers Boulevard & Rockaway Boulevard, Queens, NY",intersection,87
+40.63396,-74.01476,238,65th Street,7th Avenue,3,3,"East Harbor Seafood Palace, 65th Street, Brooklyn, NY",intersection,88
+40.6339615,-74.0147538,231,66th Street,8th Avenue,3,3,"East Harbor Seafood Palace, 65th Street, Brooklyn, NY",intersection,89
+40.60981,-73.92251,238,Flatbush Avenue,Avenue U,5,4,"Kings Plaza Shopping Center, Kings Plaza, Brooklyn, NY",intersection,90
+40.8617006,-73.8913807,227,East Fordham Road,Webster Avenue,4,3,"Webster Avenue & East 189th Street, Bronx, NY",intersection,91
+40.8285193,-73.8411794,215,Bruckner Boulevard,Brush Avenue,3,1,"Bruckner Expressway, Bronx, NY",intersection,92
+40.802753,-73.93358,216,East 125th Street,2nd Avenue,3,3,"E 125th St & 2nd Avenue, New York, NY",intersection,93
+40.7642781,-73.9730158,219,East 59th Street,5th Avenue,3,3,"William Tecumseh Sherman Monument, Doris C Freedman Place, New York, NY",intersection,94
+40.7616096,-73.9707499,220,East 57th Street,Park Avenue,3,4,"Serafina Osteria, East 58th Street, New York, NY",intersection,95
+40.7612344,-73.9638843,218,East 60th Street,2nd Avenue,2,5,"Trinity Baptist Church, East 61st Street, New York, NY",intersection,96
+40.7611802,-73.9579029,213,East 63rd Street,York Avenue,3,2,"York Avenue & East 64th Street, New York, NY",intersection,97
+40.759624,-73.99548,215,West 42nd Street,10th Avenue,3,5,"West 42nd Street & 10th Avenue, New York, NY",intersection,98
+40.7585332,-73.9888427,227,West 44th Street,8th Avenue,2,4,"John Golden Theatre, West 45th Street, New York, NY",intersection,99
+40.7559505,-73.9907272,227,West 40th Street,8th Avenue,3,5,"Castell Rooftop Lounge, AC Hotel, West 40th Street, New York, NY",intersection,100
+40.7514416,-73.9760491,222,East 42nd Street,Lexington Avenue,3,4,"Chrysler Building, New York, NY",intersection,101
+40.749824,-73.9722023,226,East 42nd Street,2nd Avenue,3,6,"Church of the Covenant, East 42nd Street, New York, NY",intersection,102
+40.7570213,-74.004927,220,West 34th Street,12th Avenue,3,4,"High Line, New York, NY",intersection,103
+40.7515235,-73.9939473,224,West 33rd Street,8th Avenue,2,5,"8th Ave & West 33rd Street, New York, NY",intersection,104
+40.747627,-73.976746,219,East 37th Street,3rd Avenue,4,5,"Romanian Cultural Institute, East 38th Street, New York, NY",intersection,105
+40.74608,-73.974945,221,East 36th Street,2nd Avenue,4,4,"Royal Tuina, East 36th Street, New York, NY",intersection,106
+40.7360047,-73.9936167,217,East 14th Street,5th Avenue,2,3,"Parsons School of Design, West 13th Street, New York, NY",intersection,107
+40.7332923,-73.9871799,214,East 14th Street,3rd Avenue,3,3,"East 14th Street & 3rd Avenue, New York, NY",intersection,108
+40.725432,-73.996771,219,East Houston Street,Broadway,5,3,"David H. Lifschutz, MD, Broadway, New York, NY",intersection,109
+40.7225499,-74.006299,218,Canal Street,Varick Street,3,4,"Albert Capsouto Park, Laight Street, New York, NY",intersection,110
+40.7489156,-73.9373965,221,Jackson Avenue,Queens Boulevard,3,2,"28-30 Jackson Avenue, Long Island City, NY",intersection,111
+40.7460347,-73.9344002,222,Skillman Avenue,Queens Boulevard,2,2,"Queens Boulevard & Skillman Avenue, Queens, NY",intersection,112
+40.68405,-73.97746,223,Atlantic Avenue,Flatbush Avenue,4,3,"Atlantic Avenue & Flatbush Avenue, Brooklyn, NY",intersection,113
+40.6241708,-73.9704715,223,Avenue J,Ocean Parkway,2,4,"Avenue J & Ocean Parkway, Brooklyn, NY",intersection,114
+40.668495,-73.925606,214,Eastern Parkway,Buffalo Avenue,2,2,"Eastern Parkway & Buffalo Avenue, Brooklyn, NY",intersection,115
+40.6806649,-73.9026216,214,Bushwick Avenue,Conway Street,2,1,"Cemetery of the Evergreens, Bushwick Avenue, Brooklyn, NY",intersection,116
+40.680016,-73.87743,215,Atlantic Avenue,Logan Street,3,2,"Atlantic Avenue & Milford Street, Brooklyn, NY",intersection,117
+40.6807,-73.8446429,221,Rockaway Boulevard,Woodhaven Boulevard,3,2,"Papa John's Pizza, Rockaway Boulevard, Ozone Park, NY",intersection,118
+40.666695,-73.767136,212,South Conduit Avenue,Farmers Boulevard,4,2,"Springfield Gardens Church of the Nazarene, Farmers Boulevard, Jamaica, NY",intersection,119
+40.6561603,-73.7673526,226,Rockaway Boulevard,North Boundary Road,4,2,"Dunkin', Rockaway Boulevard, Queens, NY",intersection,120
+40.895374,-73.86356,205,East 233rd Street,Webster Avenue,3,2,"Woodlawn Cemetery, Webster Avenue, Bronx, NY",intersection,121
+40.878643,-73.871605,209,East Gun Hill Road,Webster Avenue,3,4,"Webster Avenue & East Gun Hill Road, Bronx, NY",intersection,122
+40.828125,-73.84105,202,Cross Bronx Expressway,,3,,"St. Joseph's School for the Deaf, Hutchinson River Parkway, Bronx, NY",expressway,123
+40.8043758,-73.9374202,207,East 125th Street,Lexington Avenue,2,2,"East 125th Street & Lexington Avenue, New York, NY",intersection,124
+40.803593,-73.919785,206,Bruckner Boulevard,Saint Ann's Avenue,2,2,"Playground One Thirty Four CXXXIV, East 133rd Street, Bronx, NY",intersection,125
+40.761234,-73.96389,204,East 60th Street,2nd Avenue,5,5,"Roosevelt Island Tramway, East 60th Street, New York, NY",intersection,126
+40.7599831,-73.9648018,201,East 57th Street,2nd Avenue,3,5,"East 57th Street & 2nd Avenue, New York, NY",intersection,127
+40.7597902,-73.9879256,207,West 46th Street,8th Avenue,3,1,"Reidy Wine & Liquor Inc, 47th Avenue, New York, NY",intersection,128
+40.7579729,-73.9855364,210,West 45th Street,7th Avenue,3,3,"Minskoff Theatre, West 45th Street, New York, NY",intersection,129
+40.7578281,-73.9930696,212,West 41st Street,9th Avenue,3,4,"Port Authority Food & Deli, 9th Avenue, New York, NY",intersection,130
+40.7534749,-73.9925287,204,West 36th Street,8th Avenue,3,5,"Forever Young Nail & Spa, West 36th Street, New York, NY",intersection,131
+40.7484375,-73.9845604,201,West 34th Street,5th Avenue,2,5,"West 34th Street & 5th Avenue, New York, NY",intersection,132
+40.7397514,-74.0025224,212,West 14th Street,8th Avenue,2,5,"Shorty Tang Noodles, 8th Avenue, New York, NY",intersection,133
+40.7313511,-73.9825546,205,East 14th Street,1st Avenue,5,5,"Immaculate Conception Church, East 13th Street, New York, NY",intersection,134
+40.71997,-73.992905,205,Delancey Street,Chrystie Street,4,3,"Roni-Sue's Chocolates, Forsyth Street, New York, NY",intersection,135
+40.71843,-74.000534,201,Canal Street,Lafayette Street,3,4,"Le Coucou, Lafayette Street, New York, NY",intersection,136
+40.76635,-73.88756,208,23rd Avenue,82nd Street,2,3,"23rd Avenue & 82nd Street, Queens, NY",intersection,137
+40.7447332,-73.9335895,209,Thomson Avenue,Van Dam Street,3,3,"Van Dam Street & Thomson Avenue, Queens, NY",intersection,138
+40.7367523,-73.8776702,209,Queens Boulevard,Grand Avenue,4,2,"Grand Avenue & Queens Boulevard, Queens, NY",intersection,139
+40.76229,-73.75711,209,Cross Island Parkway,,3,,"Alley Pond Golf Center, Northern Boulevard, Queens, NY",expressway,140
+40.7118451,-73.8597598,207,Metropolitan Avenue,Woodhaven Boulevard,2,5,"Woodhaven Boulevard & Metropolitan Avenue, Queens, NY",intersection,141
+40.6899325,-73.9814728,203,Dekalb Avenue,Flatbush Avenue,2,4,"Dekalb Avenue & Flatbush Avenue, Brooklyn, NY",intersection,142
+40.6844232,-73.978388,210,Atlantic Avenue,4th Avenue,3,3,"Atlantic Avenue & 4th Avenue, Brooklyn, NY",intersection,143
+40.6784553,-73.9496774,212,Atlantic Avenue,Nostrand Avenue,3,3,"David's Brisket House, Nostrand Avenue, Brooklyn, NY",intersection,144
+40.67816,-73.897484,207,Jamaica Avenue,Jackie Robinson Parkway,3,4,"Marginal Street West, Brooklyn, NY",intersection,145
+40.68424,-73.8460949,212,101st Avenue,Woodhaven Boulevard,2,2,"Woodhaven Boulevard & 101st Avenue, Queens, NY",intersection,146
+40.665257,-73.739555,202,South Conduit Avenue,Brookville Boulevard,4,2,"Throop Memorial Presby Church, Rosedale, NY",intersection,147
+40.6503881,-73.958708,205,Church Avenue,Flatbush Avenue,2,3,"Flatbush Reformed Church, Flatbush Avenue, Brooklyn, NY",intersection,148
+40.6420578,-74.02042,208,Belt Parkway,,3,,"NYU Langone Hospital Brooklyn, 55th Street, Brooklyn, NY",overpass,149
+40.5965113,-73.9078755,202,Flatbush Avenue,,3,,"Marine Park, Brooklyn, NY",overpass,150

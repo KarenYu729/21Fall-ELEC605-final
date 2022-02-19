@@ -1,0 +1,86 @@
+---
+title: "MAPplot"
+author: "Jiahui Yu"
+date: "10/19/2021"
+output: html_document
+---
+
+```{r, echo = TRUE}
+#original File, about crashes happened in New York
+OriginalFile <- read.csv("C:/riceCourse/STAT_605_R_for_dataScien/TrafficData/Motor_Vehicle_Collisions_Crashes.csv")
+
+#summary(OriginalFile)
+
+
+OriginalLength <- nrow(OriginalFile)
+
+
+ProcessingFile <- subset(OriginalFile, !((is.na(OriginalFile$NUMBER.OF.PERSONS.INJURED))|
+                           (is.na(OriginalFile$NUMBER.OF.PERSONS.KILLED))|
+                           (is.na(OriginalFile$NUMBER.OF.PEDESTRIANS.INJURED))|
+                           (is.na(OriginalFile$NUMBER.OF.PEDESTRIANS.KILLED))|
+                           (is.na(OriginalFile$NUMBER.OF.CYCLIST.INJURED))|
+                           (is.na(OriginalFile$NUMBER.OF.CYCLIST.KILLED))|
+                           (is.na(OriginalFile$NUMBER.OF.MOTORIST.INJURED))|
+                           (is.na(OriginalFile$NUMBER.OF.MOTORIST.KILLED))|
+                           (is.na(OriginalFile$CONTRIBUTING.FACTOR.VEHICLE.1))|
+                           (is.na(OriginalFile$CONTRIBUTING.FACTOR.VEHICLE.2))|
+                           (is.na(OriginalFile$VEHICLE.TYPE.CODE.1))|
+                           (is.na(OriginalFile$VEHICLE.TYPE.CODE.2))|
+                           (is.na(OriginalFile$LONGITUDE))|
+                           (is.na(OriginalFile$LATITUDE))|
+                           (is.na(OriginalFile$ZIP.CODE))|
+                           (is.na(OriginalFile$BOROUGH))|
+                           ((OriginalFile$LONGITUDE == 0))|
+                           ((OriginalFile$LATITUDE == 0))))
+
+
+
+#map plotting
+#
+############
+
+location <- as.data.frame(table(ProcessingFile$LOCATION))
+location$Var1 <- gsub("\\(|\\)", "", location$Var1)
+
+## change data type & split latitude and longtitude
+library(tidyverse)
+temp1 <- separate(data = location, col = Var1, into = c("Latitude", "Longtitude"), sep = ", ")
+
+## using leaflet do map plotting
+library(leaflet)
+library(mapview)
+
+temp2 <- temp1[order(-temp1$Freq), ]
+
+longtitude <- c(as.numeric(temp2$Longtitude))
+latitude <- c(as.numeric(temp2$Latitude))
+labelPoint <- c(as.character(temp2$Freq))
+
+m <- leaflet()
+at <- addTiles(m)
+
+addCircles(at,lng=longtitude[1:30], lat=latitude[1:30], 
+           popup = paste0(labelPoint[1:30], latitude[1:30], longtitude[1:30]),
+           color = "red",weight = 10)
+
+addCircles(at,lng=longtitude[31:60], lat=latitude[31:60], 
+           popup = paste0(labelPoint[31:60], latitude[31:60], longtitude[31:60]),
+           color = "blue",weight = 10)
+
+addCircles(at,lng=longtitude[61:90], lat=latitude[61:90], 
+           popup = paste0(labelPoint[61:90], latitude[61:90], longtitude[61:90]),
+           color = "darkgreen",weight = 10)
+
+addCircles(at,lng=longtitude[91:120], lat=latitude[91:120], 
+           popup = paste0(labelPoint[91:120], latitude[91:120], longtitude[91:120]),
+           color = "magenta",weight = 10)
+
+addCircles(at,lng=longtitude[121:150], lat=latitude[121:150], 
+           popup = paste0(labelPoint[121:150], latitude[121:150], longtitude[121:150]),
+           color = "firebrick",weight = 10)
+
+
+```
+
+

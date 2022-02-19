@@ -1,0 +1,1773 @@
+---
+title: "Group #6 Presentation"
+author: "X. Hu, S. Wang, X. Wang, B. Xu, J. Yu"
+date: "11/11/2021"
+output: ioslides_presentation
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Contents
+<ul>
+  <li>Introduction -- J. Yu</li>
+  <li>"Killer" Plot -- X. Wang</li>
+  <li>Collision between Taxi and Vehicles -- B. Xu</li>
+  <li>Case Study -- X. Hu</li>
+  <ul>
+    <li>Case Study</li>
+    <li>Tempreture comparison</li>
+    <li>Covid comparison</li>
+  </ul>
+  <li>Conclusion -- S. Wang</li>
+</ul>
+
+## Introduction:
+#### Traffic collisions are a leading cause of death in the United State
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(imager)
+img <- load.image("C:/riceCourse/STAT_605_R_for_dataScien/TrafficData/pic.jpg")
+
+plot(img, axes = FALSE)
+```
+
+
+
+## Introduction: Overview
+```{r, message=FALSE}
+
+##collisions count by day
+library(dplyr)
+library(ggplot2)
+require(cowplot)
+
+library(reshape2)
+
+OriginalFile <- read.csv("C:/riceCourse/STAT_605_R_for_dataScien/TrafficData/Motor_Vehicle_Collisions_Crashes.csv")
+collision_crash <- OriginalFile
+
+
+col_Names <- c("date", "time", "borough", "zip", "lat", "long", "loc",
+               "on_str", "cros_str", "off_str", "per_inj", "per_kil",
+               "pd_inj", "pd_kil", "c_inj", "c_kil", "m_inj", "m_kil",
+               "cause1", "cause2", "cause3", "cause4", "cause5",
+               "id", "v_type1", "v_type2", "v_type3", "v_type4", "v_type5")
+names(collision_crash) <- col_Names
+
+Count_by_day <- subset(collision_crash, !((is.na(collision_crash$time))|
+                                          (is.na(collision_crash$per_inj))|
+                                          (is.na(collision_crash$per_kil))|
+                                          (is.na(collision_crash$pd_inj))|
+                                          (is.na(collision_crash$pd_kil))|
+                                          (is.na(collision_crash$c_inj))|
+                                          (is.na(collision_crash$c_kil))|
+                                          (is.na(collision_crash$m_inj))|
+                                          (is.na(collision_crash$m_kil))))
+#month
+mth <- as.numeric(substr(Count_by_day$date, start = 1, stop = 2))
+#day
+day <- as.numeric(substr(Count_by_day$date, start = 4, stop = 5))
+#year
+yr <- as.numeric(substr(Count_by_day$date, start = 7, stop = 10))
+#hour
+hr <- as.numeric(sub("\\:.*", "", Count_by_day$time))
+
+Count_by_day$yr <- yr
+Count_by_day$mth <- mth
+Count_by_day$day <- day
+Count_by_day$hr <- hr
+
+analysis_by_day <- function(y, m, d){
+   hourly_ana <- subset(Count_by_day, ((Count_by_day$yr == y)&
+                                      (Count_by_day$mth == m)&
+                                      (Count_by_day$day == d)))
+   #hourly_ana <- subset(Count_by_day, ((Count_by_day$yr == 2020)&
+   #                                   (Count_by_day$mth == 10)&
+    #                                  (Count_by_day$day == 20)))
+
+   df <- hourly_ana[order(hourly_ana$hr),]
+   #0-3
+   df0 <- df[which(df$hr == 0),]
+   hr0 <- c(sum(df0$per_inj), sum(df0$per_kil), sum(df0$pd_inj),
+            sum(df0$pd_kil), sum(df0$c_inj), sum(df0$c_kil),
+            sum(df0$m_inj), sum(df0$m_kil))
+
+   df1 <- df[which(df$hr == 1),]
+   hr1 <- c(sum(df1$per_inj), sum(df1$per_kil), sum(df1$pd_inj),
+            sum(df1$pd_kil), sum(df1$c_inj), sum(df1$c_kil),
+            sum(df1$m_inj), sum(df1$m_kil))
+
+   df2 <- df[which(df$hr == 2),]
+   hr2 <- c(sum(df2$per_inj), sum(df2$per_kil), sum(df2$pd_inj),
+            sum(df2$pd_kil), sum(df2$c_inj), sum(df2$c_kil),
+            sum(df2$m_inj), sum(df2$m_kil))
+
+   df3 <- df[which(df$hr == 3),]
+   hr3 <- c(sum(df3$per_inj), sum(df3$per_kil), sum(df3$pd_inj),
+            sum(df3$pd_kil), sum(df3$c_inj), sum(df3$c_kil),
+            sum(df3$m_inj), sum(df3$m_kil))
+
+   #4-7
+   df4 <- df[which(df$hr == 4),]
+   hr4 <- c(sum(df4$per_inj), sum(df4$per_kil), sum(df4$pd_inj),
+            sum(df4$pd_kil), sum(df4$c_inj), sum(df4$c_kil),
+            sum(df4$m_inj), sum(df4$m_kil))
+
+   df5 <- df[which(df$hr == 5),]
+   hr5 <- c(sum(df5$per_inj), sum(df5$per_kil), sum(df5$pd_inj),
+            sum(df5$pd_kil), sum(df5$c_inj), sum(df5$c_kil),
+            sum(df5$m_inj), sum(df5$m_kil))
+
+   df6 <- df[which(df$hr == 6),]
+   hr6 <- c(sum(df6$per_inj), sum(df6$per_kil), sum(df6$pd_inj),
+            sum(df6$pd_kil), sum(df6$c_inj), sum(df6$c_kil),
+            sum(df6$m_inj), sum(df6$m_kil))
+
+   df7 <- df[which(df$hr == 7),]
+   hr7 <- c(sum(df7$per_inj), sum(df7$per_kil), sum(df7$pd_inj),
+            sum(df7$pd_kil), sum(df7$c_inj), sum(df7$c_kil),
+            sum(df7$m_inj), sum(df7$m_kil))
+
+   #8-11
+   df8 <- df[which(df$hr == 8),]
+   hr8 <- c(sum(df8$per_inj), sum(df8$per_kil), sum(df8$pd_inj),
+            sum(df8$pd_kil), sum(df8$c_inj), sum(df8$c_kil),
+            sum(df8$m_inj), sum(df8$m_kil))
+
+   df9 <- df[which(df$hr == 9),]
+   hr9 <- c(sum(df9$per_inj), sum(df9$per_kil), sum(df9$pd_inj),
+            sum(df9$pd_kil), sum(df9$c_inj), sum(df9$c_kil),
+            sum(df9$m_inj), sum(df9$m_kil))
+
+   df10 <- df[which(df$hr == 10),]
+   hr10 <- c(sum(df10$per_inj), sum(df10$per_kil), sum(df10$pd_inj),
+            sum(df10$pd_kil), sum(df10$c_inj), sum(df10$c_kil),
+            sum(df10$m_inj), sum(df10$m_kil))
+
+   df11 <- df[which(df$hr == 11),]
+   hr11 <- c(sum(df11$per_inj), sum(df11$per_kil), sum(df11$pd_inj),
+            sum(df11$pd_kil), sum(df11$c_inj), sum(df11$c_kil),
+            sum(df11$m_inj), sum(df11$m_kil))
+
+   #12-15
+   df12 <- df[which(df$hr == 12),]
+   hr12 <- c(sum(df12$per_inj), sum(df12$per_kil), sum(df12$pd_inj),
+            sum(df12$pd_kil), sum(df12$c_inj), sum(df12$c_kil),
+            sum(df12$m_inj), sum(df12$m_kil))
+
+   df13 <- df[which(df$hr == 13),]
+   hr13 <- c(sum(df13$per_inj), sum(df13$per_kil), sum(df13$pd_inj),
+            sum(df13$pd_kil), sum(df13$c_inj), sum(df13$c_kil),
+            sum(df13$m_inj), sum(df13$m_kil))
+
+   df14 <- df[which(df$hr == 14),]
+   hr14 <- c(sum(df14$per_inj), sum(df14$per_kil), sum(df14$pd_inj),
+            sum(df14$pd_kil), sum(df14$c_inj), sum(df14$c_kil),
+            sum(df14$m_inj), sum(df14$m_kil))
+
+   df15 <- df[which(df$hr == 15),]
+   hr15 <- c(sum(df15$per_inj), sum(df15$per_kil), sum(df15$pd_inj),
+            sum(df15$pd_kil), sum(df15$c_inj), sum(df15$c_kil),
+            sum(df15$m_inj), sum(df15$m_kil))
+
+   #16-19
+   df16 <- df[which(df$hr == 16),]
+   hr16 <- c(sum(df16$per_inj), sum(df16$per_kil), sum(df16$pd_inj),
+            sum(df16$pd_kil), sum(df16$c_inj), sum(df16$c_kil),
+            sum(df16$m_inj), sum(df16$m_kil))
+
+   df17 <- df[which(df$hr == 17),]
+   hr17 <- c(sum(df17$per_inj), sum(df17$per_kil), sum(df17$pd_inj),
+            sum(df17$pd_kil), sum(df17$c_inj), sum(df17$c_kil),
+            sum(df17$m_inj), sum(df17$m_kil))
+
+   df18 <- df[which(df$hr == 18),]
+   hr18 <- c(sum(df18$per_inj), sum(df18$per_kil), sum(df18$pd_inj),
+            sum(df18$pd_kil), sum(df18$c_inj), sum(df18$c_kil),
+            sum(df18$m_inj), sum(df18$m_kil))
+
+   df19 <- df[which(df$hr == 19),]
+   hr19 <- c(sum(df19$per_inj), sum(df19$per_kil), sum(df19$pd_inj),
+            sum(df19$pd_kil), sum(df19$c_inj), sum(df19$c_kil),
+            sum(df19$m_inj), sum(df19$m_kil))
+
+   #20-23
+   df20 <- df[which(df$hr == 20),]
+   hr20 <- c(sum(df20$per_inj), sum(df20$per_kil), sum(df20$pd_inj),
+            sum(df20$pd_kil), sum(df20$c_inj), sum(df20$c_kil),
+            sum(df20$m_inj), sum(df20$m_kil))
+
+   df21 <- df[which(df$hr == 21),]
+   hr21 <- c(sum(df21$per_inj), sum(df21$per_kil), sum(df21$pd_inj),
+            sum(df21$pd_kil), sum(df21$c_inj), sum(df21$c_kil),
+            sum(df21$m_inj), sum(df21$m_kil))
+
+   df22 <- df[which(df$hr == 22),]
+   hr22 <- c(sum(df22$per_inj), sum(df22$per_kil), sum(df22$pd_inj),
+            sum(df22$pd_kil), sum(df22$c_inj), sum(df22$c_kil),
+            sum(df22$m_inj), sum(df22$m_kil))
+
+   df23 <- df[which(df$hr == 23),]
+   hr23 <- c(sum(df23$per_inj), sum(df23$per_kil), sum(df23$pd_inj),
+            sum(df23$pd_kil), sum(df23$c_inj), sum(df23$c_kil),
+            sum(df23$m_inj), sum(df23$m_kil))
+
+
+   kil <- as.data.frame(t(as.matrix(data.frame(hr0, hr1, hr2, hr3, hr4,
+                                               hr5, hr6, hr7,
+                     hr8, hr9, hr10, hr11, hr12, hr13, hr14,
+                     hr15, hr16, hr17, hr18, hr19, hr20,
+                     hr21, hr22, hr23))))
+
+   col_Names <- c("per_inj", "per_kil", "pd_inj", "pd_kil",
+                  "c_inj", "c_kil", "m_inj", "m_kil")
+   names(kil) <- col_Names
+   row.names(kil)<-c(0:23)
+   type <- c("persons",
+                 "pedestrian(s)",
+                 "cyclist(s)",
+                 "motorist(s)")
+
+   inj_plot <- ggplot(data = kil) +
+     labs(x = "Timeline by hour", y = "Number",
+          title = paste0("Injury happened during collisions on  ", y,
+                         "-", m, "-", d),
+          col = c("injury count")) +
+     theme(plot.title = element_text(hjust = 0.5)) +
+     geom_line(aes(x= c(0:23), y = per_inj, colour = "#ffcccc")) +
+     geom_line(aes(x= c(0:23), y = pd_inj, colour = "#ffcc66")) +
+     geom_line(aes(x= c(0:23), y = c_inj, colour = "#ccccff")) +
+     geom_line(aes(x= c(0:23), y = m_inj, colour = "#99cc99")) +
+     scale_colour_discrete(
+
+       breaks = c("#ffcccc","#ffcc66","#ccccff", "#99cc99"),
+       labels = type)
+
+
+   kil_plot <- ggplot(data = kil) +
+     labs(x = "Timeline by hour", y = "Number",
+          title = paste0("death happened during collisions on  ", y,
+                         "-", m, "-", d),
+          col = c("death count")) +
+     theme(plot.title = element_text(hjust = 0.5)) +
+     geom_line(aes(x= c(0:23), y = per_kil, colour = "#ffcccc")) +
+     geom_line(aes(x= c(0:23), y = pd_kil, colour = "#ffcc66")) +
+     geom_line(aes(x= c(0:23), y = c_kil, colour = "#ccccff")) +
+     geom_line(aes(x= c(0:23), y = m_kil, colour = "#99cc99")) +
+     scale_colour_discrete(
+       breaks = c("#ffcccc","#ffcc66","#ccccff", "#99cc99"),
+       labels = type)
+
+
+   ggdraw() +
+     draw_plot(inj_plot, 0, .5, 1, .5) +
+     draw_plot(kil_plot, 0, 0, 1, .5)
+
+}
+
+
+####
+###
+##year
+
+analysis_by_year <- function(y){
+  monthly_ana <- subset(Count_by_day, ((Count_by_day$yr == y)))
+
+  #monthly_ana <- subset(Count_by_day, ((Count_by_day$yr == 2020)))
+
+  df <- monthly_ana[order(monthly_ana$mth),]
+  #1-4
+  df1 <- df[which(df$mth == 1),]
+  mth1 <- c(sum(df1$per_inj), sum(df1$per_kil), sum(df1$pd_inj),
+           sum(df1$pd_kil), sum(df1$c_inj), sum(df1$c_kil),
+           sum(df1$m_inj), sum(df1$m_kil))
+
+  df2 <- df[which(df$mth == 2),]
+  mth2 <- c(sum(df2$per_inj), sum(df2$per_kil), sum(df2$pd_inj),
+           sum(df2$pd_kil), sum(df2$c_inj), sum(df2$c_kil),
+           sum(df2$m_inj), sum(df2$m_kil))
+
+  df3 <- df[which(df$mth == 3),]
+  mth3 <- c(sum(df3$per_inj), sum(df3$per_kil), sum(df3$pd_inj),
+           sum(df3$pd_kil), sum(df3$c_inj), sum(df3$c_kil),
+           sum(df3$m_inj), sum(df3$m_kil))
+
+  df4 <- df[which(df$mth == 4),]
+  mth4 <- c(sum(df4$per_inj), sum(df4$per_kil), sum(df4$pd_inj),
+           sum(df4$pd_kil), sum(df4$c_inj), sum(df4$c_kil),
+           sum(df4$m_inj), sum(df4$m_kil))
+
+  #5-8
+  df5 <- df[which(df$mth == 5),]
+  mth5 <- c(sum(df5$per_inj), sum(df5$per_kil), sum(df5$pd_inj),
+           sum(df5$pd_kil), sum(df5$c_inj), sum(df5$c_kil),
+           sum(df5$m_inj), sum(df5$m_kil))
+
+  df6 <- df[which(df$mth == 6),]
+  mth6 <- c(sum(df6$per_inj), sum(df6$per_kil), sum(df6$pd_inj),
+           sum(df6$pd_kil), sum(df6$c_inj), sum(df6$c_kil),
+           sum(df6$m_inj), sum(df6$m_kil))
+
+  df7 <- df[which(df$mth == 7),]
+  mth7 <- c(sum(df7$per_inj), sum(df7$per_kil), sum(df7$pd_inj),
+           sum(df7$pd_kil), sum(df7$c_inj), sum(df7$c_kil),
+           sum(df7$m_inj), sum(df7$m_kil))
+
+  df8 <- df[which(df$mth == 8),]
+  mth8 <- c(sum(df8$per_inj), sum(df8$per_kil), sum(df8$pd_inj),
+           sum(df8$pd_kil), sum(df8$c_inj), sum(df8$c_kil),
+           sum(df8$m_inj), sum(df8$m_kil))
+
+  #9-12
+  df9 <- df[which(df$mth == 9),]
+  mth9 <- c(sum(df9$per_inj), sum(df9$per_kil), sum(df9$pd_inj),
+           sum(df9$pd_kil), sum(df9$c_inj), sum(df9$c_kil),
+           sum(df9$m_inj), sum(df9$m_kil))
+
+  df10 <- df[which(df$mth == 10),]
+  mth10 <- c(sum(df10$per_inj), sum(df10$per_kil), sum(df10$pd_inj),
+           sum(df10$pd_kil), sum(df10$c_inj), sum(df10$c_kil),
+           sum(df10$m_inj), sum(df10$m_kil))
+
+  df11 <- df[which(df$mth == 11),]
+  mth11 <- c(sum(df11$per_inj), sum(df11$per_kil), sum(df11$pd_inj),
+            sum(df11$pd_kil), sum(df11$c_inj), sum(df11$c_kil),
+            sum(df11$m_inj), sum(df11$m_kil))
+
+  df12 <- df[which(df$mth == 12),]
+  mth12 <- c(sum(df12$per_inj), sum(df12$per_kil), sum(df12$pd_inj),
+            sum(df12$pd_kil), sum(df12$c_inj), sum(df12$c_kil),
+            sum(df12$m_inj), sum(df12$m_kil))
+
+
+
+  kil <- as.data.frame(t(as.matrix(data.frame(mth1, mth2, mth3, mth4,
+                                              mth5, mth6, mth7, mth8,
+                                              mth9, mth10, mth11, mth12))))
+
+  col_Names <- c("per_inj", "per_kil", "pd_inj", "pd_kil",
+                 "c_inj", "c_kil", "m_inj", "m_kil")
+  names(kil) <- col_Names
+  row.names(kil)<-c(1:12)
+  type <- c("persons",
+            "pedestrian(s)",
+            "cyclist(s)",
+            "motorist(s)")
+
+  inj_plot <- ggplot(data = kil) +
+    labs(x = "Timeline by month", y = "Number",
+         title = paste0("Injury happened during collisions in  ", y),
+         col = c("injury count")) +
+
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_line(aes(x= c(1:12), y = per_inj, colour = "#ffcccc")) +
+    geom_line(aes(x= c(1:12), y = pd_inj, colour = "#ffcc66")) +
+    geom_line(aes(x= c(1:12), y = c_inj, colour = "#ccccff")) +
+    geom_line(aes(x= c(1:12), y = m_inj, colour = "#99cc99")) +
+    scale_colour_discrete(
+
+      breaks = c("#ffcccc","#ffcc66","#ccccff", "#99cc99"),
+      labels = type)
+
+
+  kil_plot <- ggplot(data = kil) +
+    labs(x = "Timeline by month", y = "Number",
+         title = paste0("death happened during collisions in  ", y),
+         col = c("death count")) +
+
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_line(aes(x= c(1:12), y = per_kil, colour = "#ffcccc")) +
+    geom_line(aes(x= c(1:12), y = pd_kil, colour = "#ffcc66")) +
+    geom_line(aes(x= c(1:12), y = c_kil, colour = "#ccccff")) +
+    geom_line(aes(x= c(1:12), y = m_kil, colour = "#99cc99")) +
+    scale_colour_discrete(
+      breaks = c("#ffcccc","#ffcc66","#ccccff", "#99cc99"),
+      labels = type)
+
+
+  ggdraw() +
+    draw_plot(inj_plot, 0, .5, 1, .5) +
+    draw_plot(kil_plot, 0, 0, 1, .5)
+
+}
+
+####
+###
+#aggregate
+
+Aggregate_By_Year <- function(y1, y2, m1, m2, d1, d2){
+
+  date1 <- as.Date(c(paste0(m1, "/", d1, "/", y1)), "%m/%d/%Y")
+  date2 <- as.Date(c(paste0(m2, "/", d2, "/", y2)), "%m/%d/%Y")
+
+  aggregate_ana <- subset(Count_by_day,
+                  (as.numeric(as.Date(c(collision_crash$date), "%m/%d/%Y")-date1) >= 0)
+                  &(as.numeric(as.Date(c(collision_crash$date), "%m/%d/%Y")-date2) <= 0)
+  )
+
+
+  df <- aggregate_ana[order(aggregate_ana$mth),]
+  #1-4
+  df1 <- df[which(df$mth == 1),]
+  mth1 <- c(sum(df1$per_inj), sum(df1$per_kil), sum(df1$pd_inj),
+            sum(df1$pd_kil), sum(df1$c_inj), sum(df1$c_kil),
+            sum(df1$m_inj), sum(df1$m_kil))
+
+  df2 <- df[which(df$mth == 2),]
+  mth2 <- c(sum(df2$per_inj), sum(df2$per_kil), sum(df2$pd_inj),
+            sum(df2$pd_kil), sum(df2$c_inj), sum(df2$c_kil),
+            sum(df2$m_inj), sum(df2$m_kil))
+
+  df3 <- df[which(df$mth == 3),]
+  mth3 <- c(sum(df3$per_inj), sum(df3$per_kil), sum(df3$pd_inj),
+            sum(df3$pd_kil), sum(df3$c_inj), sum(df3$c_kil),
+            sum(df3$m_inj), sum(df3$m_kil))
+
+  df4 <- df[which(df$mth == 4),]
+  mth4 <- c(sum(df4$per_inj), sum(df4$per_kil), sum(df4$pd_inj),
+            sum(df4$pd_kil), sum(df4$c_inj), sum(df4$c_kil),
+            sum(df4$m_inj), sum(df4$m_kil))
+
+  #5-8
+  df5 <- df[which(df$mth == 5),]
+  mth5 <- c(sum(df5$per_inj), sum(df5$per_kil), sum(df5$pd_inj),
+            sum(df5$pd_kil), sum(df5$c_inj), sum(df5$c_kil),
+            sum(df5$m_inj), sum(df5$m_kil))
+
+  df6 <- df[which(df$mth == 6),]
+  mth6 <- c(sum(df6$per_inj), sum(df6$per_kil), sum(df6$pd_inj),
+            sum(df6$pd_kil), sum(df6$c_inj), sum(df6$c_kil),
+            sum(df6$m_inj), sum(df6$m_kil))
+
+  df7 <- df[which(df$mth == 7),]
+  mth7 <- c(sum(df7$per_inj), sum(df7$per_kil), sum(df7$pd_inj),
+            sum(df7$pd_kil), sum(df7$c_inj), sum(df7$c_kil),
+            sum(df7$m_inj), sum(df7$m_kil))
+
+  df8 <- df[which(df$mth == 8),]
+  mth8 <- c(sum(df8$per_inj), sum(df8$per_kil), sum(df8$pd_inj),
+            sum(df8$pd_kil), sum(df8$c_inj), sum(df8$c_kil),
+            sum(df8$m_inj), sum(df8$m_kil))
+
+  #9-12
+  df9 <- df[which(df$mth == 9),]
+  mth9 <- c(sum(df9$per_inj), sum(df9$per_kil), sum(df9$pd_inj),
+            sum(df9$pd_kil), sum(df9$c_inj), sum(df9$c_kil),
+            sum(df9$m_inj), sum(df9$m_kil))
+
+  df10 <- df[which(df$mth == 10),]
+  mth10 <- c(sum(df10$per_inj), sum(df10$per_kil), sum(df10$pd_inj),
+             sum(df10$pd_kil), sum(df10$c_inj), sum(df10$c_kil),
+             sum(df10$m_inj), sum(df10$m_kil))
+
+  df11 <- df[which(df$mth == 11),]
+  mth11 <- c(sum(df11$per_inj), sum(df11$per_kil), sum(df11$pd_inj),
+             sum(df11$pd_kil), sum(df11$c_inj), sum(df11$c_kil),
+             sum(df11$m_inj), sum(df11$m_kil))
+
+  df12 <- df[which(df$mth == 12),]
+  mth12 <- c(sum(df12$per_inj), sum(df12$per_kil), sum(df12$pd_inj),
+             sum(df12$pd_kil), sum(df12$c_inj), sum(df12$c_kil),
+             sum(df12$m_inj), sum(df12$m_kil))
+
+
+
+  kil <- as.data.frame(t(as.matrix(data.frame(mth1, mth2, mth3, mth4,
+                                              mth5, mth6, mth7, mth8,
+                                              mth9, mth10, mth11, mth12))))
+
+  col_Names <- c("per_inj", "per_kil", "pd_inj", "pd_kil",
+                 "c_inj", "c_kil", "m_inj", "m_kil")
+  names(kil) <- col_Names
+  row.names(kil)<-c(1:12)
+  type <- c("persons",
+            "pedestrian(s)",
+            "cyclist(s)",
+            "motorist(s)")
+
+  inj_plot <- ggplot(data = kil) +
+    labs(x = "Timeline by month", y = "Number",
+         title = paste0("Injury happened during collisions during  ", 
+                        y1, "-", m1, "-", d1, "~", y2, "-", m2, "-", d2),
+         col = c("injury count")) +
+
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_line(aes(x= c(1:12), y = per_inj, colour = "#ffcccc")) +
+    geom_line(aes(x= c(1:12), y = pd_inj, colour = "#ffcc66")) +
+    geom_line(aes(x= c(1:12), y = c_inj, colour = "#ccccff")) +
+    geom_line(aes(x= c(1:12), y = m_inj, colour = "#99cc99")) +
+    scale_colour_discrete(
+
+      breaks = c("#ffcccc","#ffcc66","#ccccff", "#99cc99"),
+      labels = type)
+
+
+  kil_plot <- ggplot(data = kil) +
+    labs(x = "Timeline by month", y = "Number",
+         title = paste0("death happened during collisions during  ", 
+                         y1, "-", m1, "-", d1, "~", y2, "-", m2, "-", d2),
+         col = c("death count")) +
+
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_line(aes(x= c(1:12), y = per_kil, colour = "#ffcccc")) +
+    geom_line(aes(x= c(1:12), y = pd_kil, colour = "#ffcc66")) +
+    geom_line(aes(x= c(1:12), y = c_kil, colour = "#ccccff")) +
+    geom_line(aes(x= c(1:12), y = m_kil, colour = "#99cc99")) +
+    scale_colour_discrete(
+      breaks = c("#ffcccc","#ffcc66","#ccccff", "#99cc99"),
+      labels = type)
+
+
+  ggdraw() +
+    draw_plot(inj_plot, 0, .5, 1, .5) +
+    draw_plot(kil_plot, 0, 0, 1, .5)
+
+
+}
+
+
+#-------------
+
+###full shiny 
+
+#-------------
+library(shiny)
+library(lubridate)
+
+# Define UI for app that draws a histogram ----
+ui <- fluidPage(
+  
+  # App title ----
+  titlePanel("Injury/death count"),
+  
+  # Sidebar layout with input and output definitions ----
+  sidebarLayout(
+    
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+      
+      radioButtons(
+        inputId = "show",
+        label = "Injury/death cause by collisions count",
+        c("Aggregate" = "a",
+          "Year" = "yr",
+          "Day" = "day"),
+      ),
+      
+      dateInput(
+        inputId = "date",
+        label = "Injury/death cause by collisions(one day): ",
+        value = "2020-10-20"
+      ),
+      
+      dateRangeInput(
+        inputId = "dateRange",
+        label = "Date Range: ",
+        start = "2012-01-01",
+        end = "2021-12-31"
+      )
+      
+    ),
+    
+    # Main panel for displaying outputs ----
+    mainPanel(
+      
+      # Output: Histogram ----
+      plotOutput(outputId = "distPlot")
+      
+    )
+  )
+)
+
+# Define server logic required to draw a histogram ----
+server <- function(input, output) {
+  
+  # Histogram of the Old Faithful Geyser Data ----
+  # with requested number of bins
+  # This expression that generates a histogram is wrapped in a call
+  # to renderPlot to indicate that:
+  #
+  # 1. It is "reactive" and therefore should be automatically
+  #    re-executed when inputs (input$bins) change
+  # 2. Its output type is a plot
+  output$distPlot <- renderPlot({
+    
+    date <- input$date
+    y <- year(date)
+    m <- month(date)
+    d <- day(date)
+    dateRangeLow <- input$dateRange[1]
+    dateRangeUp <- input$dateRange[2]
+    y1 <- year(dateRangeLow)
+    m1 <- month(dateRangeLow)
+    d1 <- day(dateRangeLow)
+    y2 <- year(dateRangeUp)
+    m2 <- month(dateRangeUp)
+    d2 <- day(dateRangeUp)
+
+
+    if(input$show == 'yr'){
+      analysis_by_year(y)
+    }else if(input$show == 'day'){
+      analysis_by_day(y,m,d)
+    }else{
+      Aggregate_By_Year(y1, y2, m1, m2, d1, d2)
+    }
+    
+  })
+  
+}
+
+# Create Shiny app ----
+shinyApp(ui = ui, server = server)
+
+
+
+```
+
+
+
+
+
+## Introduction: Map
+
+```{r, message=FALSE}
+
+
+ProcessingFile <- subset(OriginalFile, !((is.na(OriginalFile$NUMBER.OF.PERSONS.INJURED))|
+                           (is.na(OriginalFile$NUMBER.OF.PERSONS.KILLED))|
+                           (is.na(OriginalFile$NUMBER.OF.PEDESTRIANS.INJURED))|
+                           (is.na(OriginalFile$NUMBER.OF.PEDESTRIANS.KILLED))|
+                           (is.na(OriginalFile$NUMBER.OF.CYCLIST.INJURED))|
+                           (is.na(OriginalFile$NUMBER.OF.CYCLIST.KILLED))|
+                           (is.na(OriginalFile$NUMBER.OF.MOTORIST.INJURED))|
+                           (is.na(OriginalFile$NUMBER.OF.MOTORIST.KILLED))|
+                           (is.na(OriginalFile$CONTRIBUTING.FACTOR.VEHICLE.1))|
+                           (is.na(OriginalFile$CONTRIBUTING.FACTOR.VEHICLE.2))|
+                           (is.na(OriginalFile$VEHICLE.TYPE.CODE.1))|
+                           (is.na(OriginalFile$VEHICLE.TYPE.CODE.2))|
+                           (is.na(OriginalFile$LONGITUDE))|
+                           (is.na(OriginalFile$LATITUDE))|
+                           (is.na(OriginalFile$ZIP.CODE))|
+                           (is.na(OriginalFile$BOROUGH))|
+                           ((OriginalFile$LONGITUDE == 0))|
+                           ((OriginalFile$LATITUDE == 0))))
+
+#map plotting
+#
+############
+
+location <- as.data.frame(table(ProcessingFile$LOCATION))
+location$Var1 <- gsub("\\(|\\)", "", location$Var1)
+
+## change data type & split latitude and longtitude
+library(tidyverse)
+temp1 <- separate(data = location, col = Var1, into = c("Latitude", "Longtitude"), sep = ", ")
+
+## using leaflet do map plotting
+library(leaflet)
+library(mapview)
+
+temp2 <- temp1[order(-temp1$Freq), ]
+
+longtitude <- c(as.numeric(temp2$Longtitude))
+latitude <- c(as.numeric(temp2$Latitude))
+labelPoint <- c(as.character(temp2$Freq))
+
+m <- leaflet()
+at <- addTiles(m)
+
+addCircles(at,lng=longtitude[1:150], lat=latitude[1:150], popup = labelPoint[1:150],
+           color = "red",weight = 10)
+
+```
+
+
+## Some plots
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.align = "center", results = "hide"}
+# Loading necessary package(s) and setting working directory
+setwd("C:/riceCourse/STAT_605_R_for_dataScien/TrafficData")
+library(stringr)
+library(tidyverse)
+library(sp)
+library(rgdal)
+library(RSQLite)
+library(grid)
+library(scales)
+library(RColorBrewer)
+
+# Importing Files
+nyc <- readOGR("XYWdata/nybb_21c/nybb.shp", layer = "nybb")
+dat3 <- read.csv("XYWdata/collision_final.csv")
+temp <- read.csv("XYWdata/temp.csv")
+col_vec_3 <- c("#369eb3", "#00b0b5", "#00c0ac", "#3cce97", "#74da7b",
+               "#abe25c", "#e6e540")
+pie5_1 <- c("#228e94", "#e8f9fc")
+
+
+dat3 <- dat3 %>% 
+  mutate(hr = as.integer(str_replace_all(time, "\\:.*", "")),
+         yr = as.integer(format(as.Date(date, format = "%m/%d/%Y"), 
+                                format = "%Y")),
+         cause0 = fct_relevel(cause0, 
+                              "Violating Traffic Rules", 
+                              "Distraction/inattention", 
+                              "Lost/impair Motor Function",
+                              "Third Party Fault", 
+                              "External Causes", 
+                              "Others", 
+                              "Involuntary Causes"),
+         mth = as.integer(format(as.Date(date, format = "%m/%d/%Y"), 
+                                 format = "%m")))
+
+##---------------------------- Explanation Slides ----------------------------##
+## Cause Count Plot
+slide_1 <- function() {
+  col_vec_3 <- c("#369eb3", "#00b0b5", "#00c0ac", "#3cce97", "#74da7b",
+                 "#abe25c", "#e6e540")
+  pie_count <- dat3 %>% 
+    filter(cause0 != "Unspecified") %>% 
+    group_by(cause0) %>% 
+    count() %>% 
+    ggplot() + 
+    aes(x = cause0, weight = n, fill = cause0) + 
+    geom_bar() + 
+    scale_fill_manual(values = col_vec_3) + 
+    labs(x = "Causes",
+         y = "# of Collisions",
+         fill = "Causes") + 
+    coord_flip() + 
+    scale_y_continuous(labels = function(x) format(x, scientific = FALSE)) + 
+    theme(legend.position = "none")
+  ## Collision by Hour Plot
+  hr_count <- dat3 %>% 
+    group_by(hr, yr) %>% 
+    filter(yr != 2021, yr != 2012, yr != 2020) %>% 
+    group_by(hr, yr) %>% 
+    count() %>% 
+    ggplot() + 
+    geom_line(mapping = aes(x = hr, y = n, group = factor(yr), col = factor(yr))) + 
+    xlim(0, 23) + 
+    labs(x = "Hours",
+         y = "# of Collisions",
+         col = "Years") + 
+    theme(legend.position = "none")
+  ## Collision by Month Plot
+  mth_count <- dat3 %>% 
+    filter(yr != 2021, yr != 2012, yr != 2020) %>% 
+    group_by(mth, yr) %>% 
+    count() %>% 
+    ggplot() + 
+    geom_line(mapping = aes(x = mth, y = n, group = factor(yr), col = factor(yr))) + 
+    geom_smooth(mapping = aes(x = mth, y = n)) + 
+    ylim(13000, 21400) + 
+    xlim(1, 12) + 
+    labs(x = "Months",
+         y = element_blank(),
+         col = "Years") + 
+    theme(legend.position = "none")
+  ## Temperature by Month plot
+  temp_avg <- temp %>% 
+    mutate(mth = as.integer(format(as.Date(Month, format = "%Y/%m/%d"), 
+                                   format = "%m")),
+           yr = as.integer(format(as.Date(Month, format = "%Y/%m/%d"), 
+                                  format = "%Y"))) %>% 
+    filter(yr != 2021, yr != 2012, yr != 2020) %>% 
+    group_by(mth, yr, Avg) %>% 
+    ggplot() + 
+    geom_line(mapping = aes(x = mth, y = Avg, group = yr, col = factor(yr))) + 
+    geom_smooth(mapping = aes(x = mth, y = Avg)) + 
+    xlim(1, 12) + 
+    ylim(0, 100) + 
+    labs(x = "Months",
+         y = "Average Temp",
+         col = "Years") + 
+    theme(legend.key.size = unit(0.03, "npc"),
+          legend.key.width = unit(0.02, "npc"),
+          legend.title = element_text(size = 8),
+          legend.margin = margin(0,0,0,0))
+  grid.newpage()
+  pushViewport(viewport(layout = grid.layout(2,13)))
+  print(pie_count, vp = viewport(layout.pos.col = 2:11,
+                                 layout.pos.row = 1))
+  print(hr_count, vp = viewport(layout.pos.col = 1:4,
+                                layout.pos.row = 2))
+  print(mth_count, vp = viewport(layout.pos.col = 5:8,
+                                 layout.pos.row = 2))
+  print(temp_avg, vp = viewport(layout.pos.col = 9:13,
+                                layout.pos.row = 2))
+}
+slide_1()
+
+
+```
+
+
+## "Killer" Plot
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.align = "center"}
+## Killer plot
+## Killer plot
+hr_inj_pie <- function(cen_x, cen_y, rad, width) {
+  hr_dat <- dat3 %>% 
+    group_by(hr, yr) %>% 
+    filter(yr != 2021, yr != 2012, yr != 2020) %>% 
+    group_by(hr, yr) %>% 
+    count() %>% 
+    spread(key = yr, value = n)
+  hr_dat <- rbind(hr_dat, hr_dat[1,])
+  vec <- c(hr_dat$`2013`, 
+           hr_dat$`2014`,
+           hr_dat$`2015`,
+           hr_dat$`2016`,
+           hr_dat$`2017`,
+           hr_dat$`2018`,
+           hr_dat$`2019`)
+  
+  bandwd <- width
+  x <- 0:12
+  max <- 18300
+  min <- 0
+  xcirc <- (x-min(x)) * ((pi * 2) / (max(x)-min(x)))
+  
+  for (i in 1:7) {
+    #am plot
+    y <- vec[(25*i-24):(25*i-12)]
+    yscaled <- (y-min)*(bandwd/(max-min))
+    grid.lines(
+      x = sin(xcirc)*(yscaled + rad) + cen_x,
+      y = cos(xcirc)*(yscaled + rad) + cen_y,
+      default.units = "cm",
+      gp = gpar(col = hue_pal()(7)[i])
+    )
+    
+    #pm plot
+    y <- vec[(25*i-12):(25*i)]
+    yscaled <- (y-min)*(bandwd/(max-min))
+    grid.lines(
+      x = sin(xcirc)*(yscaled + rad) + cen_x,
+      y = cos(xcirc)*(yscaled + rad) + cen_y,
+      default.units = "cm",
+      gp = gpar(col = hue_pal()(7)[i])
+    )
+  }
+}
+geo_ellipse <- function(vars, values, cen_x, cen_y, rad_a, rad_b, col_vec, alph) {
+  # decide stopping points based on `values`
+  values <- values/sum(values)
+  parts <- max(c(ceiling(1/min(values)), 1000))
+  stops <- cumsum(round(values*parts, digit = 0))
+  
+  # making a regular n-gon consisting of triangles
+  #  grid.circle(x=cen_x, cen_y, r = rad, default.units = "cm")
+  vec <- seq(1:parts)
+  trig_x <- rad_a*cos(vec*2*pi/parts+pi/2)+cen_x
+  trig_y <- rad_b*sin(vec*2*pi/parts+pi/2)+cen_y
+  
+  # printing the triangles with correct colors
+  for (i in 1:parts) {
+    if (i <= stops[1]) {
+      grid.polygon(
+        x = c(cen_x, trig_x[i], trig_x[i+1]),
+        y = c(cen_y, trig_y[i], trig_y[i+1]),
+        default.units = "cm",
+        gp = gpar(lwd = 1, col = col_vec[1], fill = col_vec[1], alpha = alph)
+      )
+    } else {
+      for (j in 1:(length(stops)-1)) {
+        if (stops[j] < i & i <= stops[j+1]) {
+          grid.polygon(
+            x = c(cen_x, trig_x[i], trig_x[i+1]),
+            y = c(cen_y, trig_y[i], trig_y[i+1]),
+            default.units = "cm",
+            gp = gpar(lwd = 1, col = col_vec[j+1], fill = col_vec[j+1], alpha = alph)
+          )
+        }
+      }
+      if (i == parts) {
+        grid.polygon(
+          x = c(cen_x, trig_x[1], trig_x[parts]),
+          y = c(cen_y, trig_y[1], trig_y[parts]),
+          default.units = "cm",
+          gp = gpar(lwd = 1, col = col_vec[length(col_vec)-1], fill = col_vec[length(col_vec)-1], alpha = alph)
+        )
+      }
+    }
+  }
+}
+mth_inj_pie <- function(cen_x, cen_y, rad_a, rad_b, width) {
+  mth_dat <- dat3 %>% 
+    filter(yr != 2021, yr != 2012, yr != 2020) %>% 
+    group_by(mth, yr) %>% 
+    count() %>% 
+    spread(key = yr, value = n)
+  mth_dat <- rbind(mth_dat, mth_dat[1,])
+  vec <- c(mth_dat$`2013`, 
+           mth_dat$`2014`,
+           mth_dat$`2015`,
+           mth_dat$`2016`,
+           mth_dat$`2017`,
+           mth_dat$`2018`,
+           mth_dat$`2019`)
+  
+  bandwd <- width
+  x <- 0:12
+  max <- 21400
+  min <- 14000
+  xcirc <- (x-min(x)) * ((pi * 2) / (max(x)-min(x)))
+  
+  for (i in 1:7) {
+    y <- vec[(i*13-12):(i*13)]
+    yscaled <- (y-min)*(bandwd/(max-min))
+    grid.lines(
+      x = cos(xcirc)*(yscaled + rad_a) + cen_x,
+      y = sin(xcirc)*(yscaled + rad_b) + cen_y,
+      default.units = "cm",
+      gp = gpar(col = hue_pal()(7)[i])
+    )
+  }
+}
+temp_pie <- function(cen_x, cen_y, rad_a, rad_b, width) {
+  temp_dat <- temp %>% 
+    mutate(mth = as.integer(format(as.Date(Month, format = "%Y/%m/%d"), 
+                                   format = "%m")),
+           yr = as.integer(format(as.Date(Month, format = "%Y/%m/%d"), 
+                                  format = "%Y"))) %>% 
+    group_by(mth, yr, Avg) %>% 
+    select(mth, yr, Avg) %>% 
+    filter(yr != 2012, yr !=2020, yr !=2021) %>% 
+    spread(key = yr, value = Avg)
+  temp_dat <- rbind(temp_dat, temp_dat[1,])
+  vec <- c(temp_dat$`2013`, 
+           temp_dat$`2014`,
+           temp_dat$`2015`,
+           temp_dat$`2016`,
+           temp_dat$`2017`,
+           temp_dat$`2018`,
+           temp_dat$`2019`)
+  
+  bandwd <- width
+  x <- 0:12
+  max <- 100
+  min <- 0
+  xcirc <- (x-min(x)) * ((pi * 2) / (max(x)-min(x)))
+  
+  for (i in 1:7) {
+    y <- vec[(i*13-12):(i*13)]
+    yscaled <- (y-min)*(bandwd/(max-min))
+    grid.lines(
+      x = cos(xcirc)*(yscaled + rad_a) + cen_x,
+      y = sin(xcirc)*(yscaled + rad_b) + cen_y,
+      default.units = "cm",
+      gp = gpar(col = "black")
+    )
+  }
+}
+ellipse <- function(a, b, cen_x, cen_y, col = "black", lwd = 1, lty = 1) {
+  x <- seq(1:100)
+  y <- rep(1, times = 100)
+  xcirc <- (x-min(x)) * ((pi * 2) / (max(x)-min(x)))
+  grid.lines(
+    x = sin(xcirc)*a + cen_x,
+    y = cos(xcirc)*b + cen_y,
+    default.units = "cm",
+    gp = gpar(col = col, lwd = lwd, lty = lty)
+  )
+}
+## Plotting function
+killer_plot <- function(shrink = 1, x_move = 0, y_move = 0) {
+  ## Variables needed
+  df <- dat3 %>% 
+    filter(cause0 != "Unspecified")
+  cause_df <- df %>%
+    group_by(cause0) %>% 
+    count()
+  am9 <- df %>% 
+    filter(hr == 9) %>% 
+    group_by(cause0) %>% 
+    count()
+  am3 <- df %>% 
+    filter(hr == 3) %>% 
+    group_by(cause0) %>% 
+    count()
+  mth1 <- df %>% 
+    filter(mth == 1) %>% 
+    group_by(cause0) %>% 
+    count()
+  mth4 <- df %>% 
+    filter(mth == 4) %>% 
+    group_by(cause0) %>% 
+    count()
+  mth7 <- df %>% 
+    filter(mth == 7) %>% 
+    group_by(cause0) %>% 
+    count()
+  mth10 <- df %>% 
+    filter(mth == 10) %>% 
+    group_by(cause0) %>% 
+    count()
+  col_vec_3 <- c("#369eb3", "#00b0b5", "#00c0ac", "#3cce97", "#74da7b",
+                 "#abe25c", "#e6e540")
+  
+  geo_ellipse(vars = cause_df$cause0, 
+              values = cause_df$n, 
+              cen_x = 9.5 + x_move, cen_y = 5.8 + y_move, 
+              rad_a = 6.7*shrink, 
+              rad_b = 4.3*shrink,
+              col_vec = col_vec_3, 
+              alph = 0.3)
+  geo_ellipse(vars = cause_df$cause0, 
+              values = cause_df$n, 
+              cen_x = 9.5 + x_move, cen_y = 5.8 + y_move, 
+              rad_a = 2.8*shrink, 
+              rad_b = 2.8*shrink,
+              col_vec = col_vec_3, 
+              alph = 1)
+  grid.lines(
+    x = c(9.5 + x_move, 9.5 + x_move),
+    y = c(5.8 + y_move, 5.8 + y_move - 2.8*shrink),
+    default.units = "cm",
+    gp = gpar(lty = 3, col = "yellow", lwd = 0.7)
+  )
+  # grid.circle(
+  #   x = 9.5 + x_move,
+  #   y = 5.8 + y_move,
+  #   r = 2.8*shrink,
+  #   gp = gpar(fill = NA, lty = 3, col = "yellow", lwd = 0.7),
+  #   default.units = "cm"
+  # )
+  grid.circle(
+    x = 9.5 + x_move,
+    y = 5.8 + y_move,
+    r = 1.3*shrink,
+    gp = gpar(fill = NA, lty = 3, col = "black", lwd = 0.4),
+    default.units = "cm"
+  )
+  hr_inj_pie(cen_x = 9.5 + x_move, cen_y = 5.8 + y_move, rad = 1.3*shrink, width = 1.5*shrink)
+  mth_inj_pie(cen_x = 9.5 + x_move, cen_y = 5.8 + y_move, rad_a = 5.2*shrink, rad_b = 2.8*shrink, width = 1.5*shrink)
+  temp_pie(cen_x = 9.5 + x_move, cen_y = 5.8 + y_move, rad_a = 5.2*shrink, rad_b = 2.8*shrink, width = 1.5*shrink)
+  geo_ellipse(vars = am9$cause0, 
+              values = am9$n, 
+              cen_x = 4*shrink*sin(3*pi/2) + 9.5 + x_move, 
+              cen_y = 4*shrink*cos(3*pi/2) + 5.8 + y_move, 
+              rad_a = 1.2*shrink,
+              rad_b = 1.2*shrink,
+              col_vec = col_vec_3, 
+              alph = 0.2)
+  geo_ellipse(vars = am3$cause0, 
+              values = am3$n, 
+              cen_x = 4*shrink*sin(pi/2) + 9.5 + x_move, 
+              cen_y = 4*shrink*cos(pi/2) + 5.8 + y_move, 
+              rad_a = 1.2*shrink,
+              rad_b = 1.2*shrink,
+              col_vec = col_vec_3, 
+              alph = 0.2)
+  ellipse(a = 5.2*shrink, b = 2.8*shrink, 
+          cen_x = 9.5 + x_move, cen_y = 5.8 + y_move,
+          col = "yellow",
+          lwd = 1.7,
+          lty = 3)
+  geo_ellipse(
+    vars = mth1$cause0,
+    values = mth1$n,
+    cen_x = 6.7*shrink*cos(0) + 9.5 + x_move,
+    cen_y = 4.3*shrink*sin(0) + 5.8 + y_move,
+    rad_a = 1.2*shrink,
+    rad_b = 1.2*shrink,
+    col_vec = col_vec_3, 
+    alph = 0.3
+  )
+  geo_ellipse(
+    vars = mth4$cause0,
+    values = mth4$n,
+    cen_x = 6.7*shrink*cos(pi/2) + 9.5 + x_move,
+    cen_y = 4.3*shrink*sin(pi/2) + 5.8 + y_move,
+    rad_a = 1.2*shrink,
+    rad_b = 1.2*shrink,
+    col_vec = col_vec_3, 
+    alph = 0.3
+  )
+  geo_ellipse(
+    vars = mth7$cause0,
+    values = mth7$n,
+    cen_x = 6.7*shrink*cos(pi) + 9.5 + x_move,
+    cen_y = 4.3*shrink*sin(pi) + 5.8 + y_move,
+    rad_a = 1.2*shrink,
+    rad_b = 1.2*shrink,
+    col_vec = col_vec_3, 
+    alph = 0.3
+  )
+  geo_ellipse(
+    vars = mth10$cause0,
+    values = mth10$n,
+    cen_x = 6.7*shrink*cos(3*pi/2) + 9.5 + x_move,
+    cen_y = 4.3*shrink*sin(3*pi/2) + 5.8 + y_move,
+    rad_a = 1.2*shrink,
+    rad_b = 1.2*shrink,
+    col_vec = col_vec_3, 
+    alph = 0.3
+  )
+  # for (i in 1:4) {
+  #   grid.circle(
+  #     x = 6.7*shrink*cos(i*pi/2) + 9.5 + x_move,
+  #     y = 4.3*shrink*sin(i*pi/2) + 5.8 + y_move,
+  #     r = 1.2*shrink,
+  #     default.units = "cm",
+  #     gp = gpar(col = "yellow", fill = NA, lty = 3)
+  #   )
+  # }
+  for (i in 1:4) {
+    grid.lines(
+      x = c(6.7*shrink*cos(i*pi/2) + 9.5 + x_move, 6.7*shrink*cos(i*pi/2) + 9.5 + x_move),
+      y = c(4.3*shrink*sin(i*pi/2) + 5.8 + y_move, 4.3*shrink*sin(i*pi/2) + 5.8 + y_move - 1.2*shrink),
+      default.units = "cm",
+      gp = gpar(lty = 3, col = "yellow", lwd = 0.7)
+    )
+  }
+  for (i in 0:1) {
+    grid.lines(
+      x = c(4*shrink*sin(pi/2+i*pi) + 9.5 + x_move, 4*shrink*sin(pi/2+i*pi) + 9.5 + x_move),
+      y = c(4*shrink*cos(pi/2+i*pi) + 5.8 + y_move, 4*shrink*cos(pi/2+i*pi) + 5.8 + y_move - 1.2*shrink),
+      default.units = "cm",
+      gp = gpar(lty = 3, col = "yellow", lwd = 0.7)
+    )
+  }
+}
+killer_legend <- function(x = 1.5, y = 7.8, h = 3.8) {
+  geo_legend <- function(left_x, top_y, col_vec, txt_vec, legend_height) {
+    # Set parameters
+    box_ht <- legend_height/length(col_vec)
+    font <- floor((0.55*box_ht)*28.35)
+    rad <- 0.65*(box_ht/2)
+    
+    # Looping
+    for (i in 1:(length(col_vec)-1)) {
+      grid.circle(
+        x = left_x,
+        y = top_y - i*box_ht,
+        r = rad,
+        default.units = "cm",
+        gp = gpar( 
+          fill = col_vec[i],
+          lwd = 0
+        )
+      )
+      grid.text(
+        label = txt_vec[i],
+        x = left_x + rad*2.5,
+        y = top_y - i*box_ht,
+        just = "left",
+        default.units = "cm",
+        gp = gpar(fontsize = font)
+      )
+    }
+  }
+  col_vec_3 <- c("#369eb3", "#00b0b5", "#00c0ac", "#3cce97", "#74da7b",
+                 "#abe25c", "#e6e540", "white")
+  txt_causes <- c("Violating Traffic Rules", 
+                  "Distraction/inattention", 
+                  "Lost/impair Motor Function",
+                  "Third Party Fault", 
+                  "External Causes", 
+                  "Others", 
+                  "Involuntary Causes")
+  yr_vec <- c("2013", "2014", "2015", "2016", "2017", "2018", "2019")
+  geo_legend(left_x = x, top_y = y, col_vec = col_vec_3, txt_vec = txt_causes, legend_height = h)
+  geo_legend(left_x = x, top_y = y-h, col_vec = hue_pal()(8), txt_vec = yr_vec, legend_height = h)
+  geo_legend(left_x = x + 1.8, top_y = y-h, col_vec = rep("black", times = 8), txt_vec = rep("Temp", times = 8), legend_height = h)
+}
+killer_pics <- function(shrink = 1, x_move = 0, y_move = 0, size = 1) {
+  clock <- function(color = "black", alpha = 0.6, family = "mono") {
+    times <- (2*pi)/12*(1:12)
+    grid.text(
+      label = 1:12,
+      x = 2.5*shrink*sin(times) + 9.5 + x_move,
+      y = 2.5*shrink*cos(times) + 5.8 + y_move,
+      default.units = "cm",
+      gp = gpar(col = color, alpha = alpha)
+    )
+    grid.text(
+      label = "AM",
+      x = 9.5 + x_move,
+      y = 5.8 + y_move,
+      default.units = "cm",
+      gp = gpar(col = color, alpha = alpha, fontsize = 20, fontfamily = family)
+    )
+  }
+  snow <- function(color = "blue", radius = 0.65*size, lwd = 1, alpha = alpha) {
+    snow_col <- color
+    snow <- (2*pi)/6*(1:6)
+    snow_x <- 6.7*shrink*cos(0) + 9.5 + x_move
+    snow_y <- 4.3*shrink*sin(0) + 5.8 + y_move
+    snow_rad <- radius
+    snow_alpha <- alpha
+    for (i in 1:6) {
+      grid.lines(
+        x = c(snow_x, snow_rad*sin(snow[i]) + snow_x),
+        y = c(snow_y, snow_rad*cos(snow[i]) + snow_y),
+        default.units = "cm",
+        gp = gpar(col = snow_col, alpha = snow_alpha, lwd = lwd)
+      )
+    }
+    pos_rad <- c(0.6, 0.45, 0.25, 0.1)
+    leaf_len <- c(0.3, 0.25, 0.45, 0.1)
+    for (j in 1:4) {
+      for (i in 1:6) {
+        if (i == 1) {
+          leaf_x <- snow_rad*pos_rad[j]*sin(snow[1])
+          leaf_y <- snow_rad*pos_rad[j]*cos(snow[1])
+          grid.lines(
+            x = c(leaf_x + snow_x, snow_rad*leaf_len[j]*sin(snow[6]) + leaf_x + snow_x),
+            y = c(leaf_y + snow_y, snow_rad*leaf_len[j]*cos(snow[6]) + leaf_y + snow_y),
+            default.units = "cm",
+            gp = gpar(col = snow_col, alpha = snow_alpha, lwd = lwd)
+          )
+          grid.lines(
+            x = c(leaf_x + snow_x, snow_rad*leaf_len[j]*sin(snow[2]) + leaf_x + snow_x),
+            y = c(leaf_y + snow_y, snow_rad*leaf_len[j]*cos(snow[2]) + leaf_y + snow_y),
+            default.units = "cm",
+            gp = gpar(col = snow_col, alpha = snow_alpha, lwd = lwd)
+          )
+        } else if (i == 6) {
+          leaf_x <- snow_rad*pos_rad[j]*sin(snow[6])
+          leaf_y <- snow_rad*pos_rad[j]*cos(snow[6])
+          grid.lines(
+            x = c(leaf_x + snow_x, snow_rad*leaf_len[j]*sin(snow[5]) + leaf_x + snow_x),
+            y = c(leaf_y + snow_y, snow_rad*leaf_len[j]*cos(snow[5]) + leaf_y + snow_y),
+            default.units = "cm",
+            gp = gpar(col = snow_col, alpha = snow_alpha, lwd = lwd)
+          )
+          grid.lines(
+            x = c(leaf_x + snow_x, snow_rad*leaf_len[j]*sin(snow[1]) + leaf_x + snow_x),
+            y = c(leaf_y + snow_y, snow_rad*leaf_len[j]*cos(snow[1]) + leaf_y + snow_y),
+            default.units = "cm",
+            gp = gpar(col = snow_col, alpha = snow_alpha, lwd = lwd)
+          )
+        } else {
+          leaf_x <- snow_rad*pos_rad[j]*sin(snow[i])
+          leaf_y <- snow_rad*pos_rad[j]*cos(snow[i])
+          grid.lines(
+            x = c(leaf_x + snow_x, snow_rad*leaf_len[j]*sin(snow[i-1]) + leaf_x + snow_x),
+            y = c(leaf_y + snow_y, snow_rad*leaf_len[j]*cos(snow[i-1]) + leaf_y + snow_y),
+            default.units = "cm",
+            gp = gpar(col = snow_col, alpha = snow_alpha, lwd = lwd)
+          )
+          grid.lines(
+            x = c(leaf_x + snow_x, snow_rad*leaf_len[j]*sin(snow[i+1]) + leaf_x + snow_x),
+            y = c(leaf_y + snow_y, snow_rad*leaf_len[j]*cos(snow[i+1]) + leaf_y + snow_y),
+            default.units = "cm",
+            gp = gpar(col = snow_col, alpha = snow_alpha, lwd = lwd)
+          )
+        }
+      }
+    }
+  }
+  sun <- function(fill = "yellow", radius = 0.3*size, alpha = 0.3) {
+    sun_x <- 6.7*shrink*cos(pi) + 9.5 + x_move
+    sun_y <- 4.3*shrink*sin(pi) + 5.8 + y_move
+    sun_rad <- radius
+    sun_ratio <- 1.7
+    sun <- (2*pi)/6*(1:6)
+    sun_alpha <- alpha
+    grid.circle(
+      x = sun_x,
+      y = sun_y,
+      r = sun_rad,
+      default.units = "cm",
+      gp = gpar(fill = fill, lwd = 0, alpha = sun_alpha, col = fill)
+    )
+    for (i in 1:6) {
+      grid.circle(
+        x = sun_x + sun_rad*sun_ratio*sin(sun[i]),
+        y = sun_y + sun_rad*sun_ratio*cos(sun[i]),
+        r = sun_rad*0.4,
+        default.units = "cm",
+        gp = gpar(fill = fill, lwd = 0, alpha = sun_alpha, col = fill)
+      )
+    }
+  }
+  leaf <- function(angle, radius = 0.6*size, color, offset = 0) {
+    fall_x <- 6.7*shrink*cos(angle) + 9.5 + x_move
+    fall_y <- 4.3*shrink*sin(angle) + 5.8 + y_move + offset
+    rad_fall <- radius
+    fall_col <- color
+    fall_alpha <- 0.7
+    fall_theta <- c(0, pi/2, 3*pi/2)
+    fall_side <- c(1, 11)
+    for (i in 1:3) {
+      for (j in 1:2) {
+        grid.polygon(
+          x = c(fall_x, rad_fall*sin(fall_theta[i]) + fall_x, rad_fall*0.75*sin(fall_side[j]/12*(2*pi) + fall_theta[i]) + fall_x),
+          y = c(fall_y, rad_fall*cos(fall_theta[i]) + fall_y, rad_fall*0.75*cos(fall_side[j]/12*(2*pi) + fall_theta[i]) + fall_y),
+          default.units = "cm",
+          gp = gpar(fill = fall_col, lwd = 0, alpha = fall_alpha, col = fall_col)
+        )
+      }
+    }
+    grid.polygon(
+      x = c(fall_x + rad_fall*0.05, fall_x + rad_fall*0.05, fall_x - rad_fall*0.05, fall_x - rad_fall*0.05),
+      y = c(fall_y, fall_y - rad_fall*0.55, fall_y - rad_fall*0.7, fall_y),
+      default.units = "cm",
+      gp = gpar(fill = fall_col, lwd = 0, alpha = 0.7, col = fall_col)
+    )
+  }
+  leaf(angle = 3*pi/2, color = "orange", offset = -0.1)
+  leaf(angle = pi/2, color = "green", offset = -0.1)
+  snow(color = "#bfefff", alpha = 0.6)
+  sun()
+  clock()
+}
+
+##------------------------------ Plotting Plot -------------------------------##
+killer_plot(shrink = 0.85, x_move = 2, y_move = -0.5)
+killer_legend(x = 1.2, y = 9.2, h = 4)
+killer_pics(shrink = 0.85, x_move = 2, y_move = -0.5, size = 0.8)
+
+```
+
+
+
+
+## Collision type: Taxi
+
+```{r, message=FALSE, warning=FALSE}
+
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(knitr) 
+library(stringr)
+library(knitr) 
+library(scales)
+library(lubridate)
+collision <- OriginalFile
+col_Names <- c("date", "time", "borough", "zip", "lat", "long", "loc", 
+               "on_str", "cros_str", "off_str", "per_inj", "per_kil", 
+               "pd_inj", "pd_kil", "c_inj", "c_kil", "m_inj", "m_kil", 
+               "cause1", "cause2", "cause3", "cause4", "cause5", 
+               "id", "type1", "type2", "type3", "type4", "type5")
+names(collision) <- col_Names
+collision$date<-as.Date(collision$date, format="%m/%d/%Y")
+#str(collision)
+
+# str_replace to set vechile type in crash
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("saden", ignore_case=TRUE), "Sedan")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("sedan", ignore_case=TRUE), "Sedan")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("4 dr sedan", ignore_case=TRUE), 
+                                 "Sedan")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("2 dr sedan", ignore_case=TRUE), 
+                                 "Sedan")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("Station Wagon/Sport Utility Vehicle", 
+                                       ignore_case=TRUE), "SUV")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("SPORT UTILITY / STATION WAGON", 
+                                       ignore_case=TRUE), "SUV")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("taxi", ignore_case=TRUE), "Taxi")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("PICK-UP TRUCK", ignore_case=TRUE), 
+                                 "Truck")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("Box Truck", ignore_case=TRUE), 
+                                 "Truck")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("bus", ignore_case=TRUE), 
+                                 "Bus")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("van", ignore_case=TRUE), 
+                                 "Van")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("Motorcycle", ignore_case=TRUE), 
+                                 "Motorcycle")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("AMBULANCE", ignore_case=TRUE), 
+                                 "Ambulance")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("AMBULANCE", ignore_case=TRUE), 
+                                 "Ambulance")
+collision$type1<-str_replace_all(collision$type1, 
+                                 fixed("UNKNOWN", ignore_case=TRUE), 
+                                 "OTHER")
+collision$type2<-str_replace_all(collision$type2,
+                                 fixed("TAXI", ignore_case=TRUE), 
+                                 "Taxi")
+collision$type2<-str_replace_all(collision$type2, 
+                                 fixed("Station Wagon/Sport Utility Vehicle", 
+                                       ignore_case=TRUE), "SUV")
+collision$type2<-str_replace_all(collision$type2, 
+                                 fixed("SPORT UTILITY / STATION WAGON", 
+                                       ignore_case=TRUE), "SUV")
+collision$type2[collision$type2==""]<-"UNKNOWN"
+
+taxi<-collision %>%
+      filter(type1 =="Taxi"|type2 =="Taxi")
+taxi$type<-str_c(taxi$type1,"+",taxi$type2)
+taxi$type<-str_replace_all(taxi$type, 
+                          fixed("Sedan+Taxi", ignore_case=TRUE),
+                          "Taxi+Sedan")
+taxi$type<-str_replace_all(taxi$type, 
+                          fixed("PASSENGER VEHICLE+Taxi", ignore_case=TRUE),
+                          "Taxi+PASSENGER VEHICLE")
+taxi$type<-str_replace_all(taxi$type, 
+                          fixed("SUV+Taxi", ignore_case=TRUE),
+                          "Taxi+SUV")
+taxi$type<-str_replace_all(taxi$type, 
+                          fixed("Taxi+BICYCLE", ignore_case=TRUE),
+                          "Taxi+Bike")
+taxi$per_inj = taxi$pd_inj + taxi$m_inj + taxi$c_inj
+taxi$per_kil = taxi$pd_kil + taxi$m_kil + taxi$c_kil
+
+taxi$Year<-format(as.Date(taxi$date, format="%m/%d/%Y"),"%Y")
+taxi2<-taxi %>%
+      group_by(Year) %>%
+      count()
+
+ggplot(taxi2,aes(x=Year,y=n,group=1))+
+  geom_point(size=2) +
+  geom_line(size=1) + 
+  xlab("year") + ylab("Taxi collision")+
+  theme_bw()
+
+
+```
+
+
+## Collision between Taxi and Vehicles
+```{r, message=FALSE, warning=FALSE}
+
+taxi1<- taxi %>%
+  group_by(type) %>%
+  summarise(kill=sum(per_kil),inj=sum(per_inj), n = n())
+
+taxi1<-taxi1[order(taxi1$n,decreasing = TRUE),] 
+taxi1<-taxi1[1:6,]
+
+p1 <- ggplot(taxi1,aes(x=type,y=n,fill = type))+
+  geom_bar(stat ="identity")+
+  scale_y_continuous(breaks =seq(from = 0, to = 30000, by = 5000))+
+  xlab("Taxi collision") + ylab("Total")+
+  coord_flip() 
+
+#### total car type
+cartype<-collision %>%
+      group_by(type1) %>%
+      count()
+cartype<-cartype[order(cartype$n,decreasing = TRUE),] 
+cartype<-cartype[1:6,]
+p2 <- ggplot(cartype,aes(x=type1,y=n,fill = type1))+
+  geom_bar(stat ="identity")+
+  xlab("collision") + ylab("Total")+
+  scale_y_continuous(labels = scales::comma)+
+  coord_flip()
+
+library(gridExtra)
+grid.arrange(p2, p1,nrow = 2)
+ 
+```
+
+
+
+## Taxi & Vehicles: Death & Injury
+```{r, message=FALSE, warning=FALSE, fig.height = 4.5, fig.width = 7.75}
+library(gridExtra)
+p1 <- ggplot(taxi1,aes(x=type,y=kill,fill = type))+
+  geom_bar(stat ="identity")+
+  xlab("Taxi Collision Death") + ylab("Total")+
+  coord_flip() 
+
+p2 <- ggplot(taxi1,aes(x=type,y=inj,fill = type))+
+  geom_bar(stat ="identity")+
+  xlab("Taxi Collision Injury") + ylab("Total")+
+  coord_flip() 
+
+grid.arrange(p1, p2,nrow = 2)
+
+```
+
+
+
+
+
+## Case Study
+```{r, message=FALSE, warning=FALSE}
+#Collision data
+theUrl <-"C:/riceCourse/STAT_605_R_for_dataScien/TrafficData/Motor_Vehicle_Collisions_Crashes.csv"
+Data_main <- read.csv(file=theUrl, header=TRUE, sep=",",fill = TRUE)
+#Traffic volume data
+theUrl <-"C:/riceCourse/STAT_605_R_for_dataScien/TrafficData/Traffic_Volume_Counts__2014-2019_.csv"
+Data_tv2 <-read.csv(file=theUrl, header=TRUE, sep=",",fill = TRUE)
+
+ui = fluidPage(
+
+
+  sidebarLayout(
+
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+
+      # Input: Slider for the number of bins ----
+      textInput("RoadName", "The road name"),
+
+    ),
+
+    # Main panel for displaying outputs ----
+    mainPanel(
+
+      # Output: Histogram -----
+      plotOutput(outputId = "distPlot")
+
+    )
+  )
+
+
+)
+
+server = function(input, output, session) {
+
+  output$distPlot <- renderPlot({
+
+
+    #User enter the road name
+    Roadname0 <- input$RoadName
+
+    #Preprocess
+    if(str_detect(Roadname0,"Street|street|STREET|ST|st")|
+       str_detect(Roadname0,"Avenue|avenue|AVENUE|AVE|ave")){
+
+      Roadname1 <- str_replace_all(Roadname0, "(Street|street|STREET|ST|st)","St")
+      Roadname <- str_replace_all(Roadname1, "(Avenue|avenue|AVENUE|AVE|ave)","Ave")
+
+    }else{
+      Roadname <- Roadname0
+    }
+
+
+    Roadname_exp <- paste(Roadname,
+                          if(Roadname!=tolower(Roadname)){tolower(Roadname)}else{Roadname},
+                          if(Roadname!=toupper(Roadname)){toupper(Roadname)}else{Roadname},
+                          sep="|")
+
+    #Filter out the data
+    Data_case <- Data_main %>% filter(str_detect(ON.STREET.NAME,
+                                                 paste(" (",Roadname_exp,")|^(",Roadname_exp,")",sep="")))
+
+
+    Data_volume <- Data_tv2 %>% filter(str_detect(Roadway.Name,
+                                                  paste(" (",Roadname_exp,")|^(",Roadname_exp,")",sep="")))
+
+
+    #Compute the average traffic volume for the certain street
+    Data_volume_ave <- c()
+    for (i in 1:24){
+      Data_volume_ave[i] <- ave(Data_volume[1:9,7+i])[1]
+    }
+
+    #Extract time information from the collision data
+    hour <- as.numeric(str_sub(str_extract(Data_case$CRASH.TIME,"([0-9]{2}|[0-9]{1}):"),1,-2))
+    min <- as.numeric(str_sub(str_extract(Data_case$CRASH.TIME,":([0-9]{2}|[0-9]{1})"),2,-1))
+    case_time <- hour + (min/60)
+
+    #Calculate the numbers of collisions per hour
+    case_num <- c()
+    for (i in 1:24){
+      case_num[i] <- sum(hour==i)
+    }
+
+
+    #Plot the traffic volume and collision case plot
+    df_tv <- data.frame(Time=c(1:24),
+                        Volume_avg=Data_volume_ave,
+                        Number=case_num
+    )
+
+    ggplot(df_tv,aes(x=Time)) +
+      geom_step(aes(y=Volume_avg,col="one"), show.legend = TRUE) +
+      geom_step(aes(y=Number,col="two"), show.legend = TRUE) +
+      theme_bw() +
+      xlab("Hour in a day") + ylab("Number of cars/collisions") +
+      ggtitle("Traffic Volumes & Collision Case for the road") +
+      scale_x_continuous(breaks=seq(1, 24, by = 1)) +
+      scale_colour_manual(name = "",
+                          values = c("one"="red","two"="blue"),
+                          labels = c("Traffic Volume", "Number of collisions"))
+
+  })
+
+
+}
+
+shinyApp(ui = ui, server = server)
+
+
+
+
+
+```
+
+## Temperature & Collision
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.align = "center"}
+library(RSQLite)
+library(gridExtra)
+
+#Load Data_covid
+dcon <- dbConnect(SQLite(),
+                  dbname="C:/riceCourse/STAT_605_R_for_dataScien/TrafficData/Data_collision_and_factors.db")
+
+#Data_main2
+res <- dbSendQuery(conn = dcon, "
+SELECT date,id
+FROM Data_collision;
+")
+Data_main2 <- dbFetch(res, -1)
+dbClearResult(res)
+
+#Data_temperature2
+res <- dbSendQuery(conn = dcon, "
+SELECT date,Avg
+FROM Data_temperature;
+")
+Data_temperature2 <- dbFetch(res, -1)
+dbClearResult(res)
+
+#Data_covid2
+res <- dbSendQuery(conn = dcon, "
+SELECT date,daily_increasing_cases
+FROM Data_covid;
+")
+Data_covid2 <- dbFetch(res, -1)
+dbClearResult(res)
+
+dbDisconnect(dcon)
+
+#Preprocess for Collision data
+#Count the number of collisions per month
+Data_year<-substr(Data_main2[[1]], 7, 10)
+Data_month<-substr(Data_main2[[1]], 1, 2)
+Data_day<-substr(Data_main2[[1]], 4, 5)
+Data_date<-ymd(paste(Data_year,Data_month,sep="-"),truncated = 1)
+
+num_month<-c()
+for (i in 1:10){
+  for (j in 1:12){
+    if(1<=j&j<=9){
+      num_month[12*(i-1)+j]<-sum(Data_date==paste("20",(11+i),"-0",j,"-01",sep=""))
+    }
+    if(10<=j&j<=12){
+      num_month[12*(i-1)+j]<-sum(Data_date==paste("20",(11+i),"-",j,"-01",sep=""))
+    }
+  }
+}
+df <- data.frame(Date=ymd(Data_temperature2$date),
+                 number=num_month[7:112],
+                 Temperature_avg=Data_temperature2$Avg)
+df$Year <- as.numeric(str_sub(Data_temperature2$date,1,4))
+
+#Preprocess for Covid data (02/2020 - 04/2021)
+Data_year_covid<-substr(Data_covid2$date, 7, 10)
+Data_month_covid<-substr(Data_covid2$date, 1, 2)
+Data_day_covid<-substr(Data_covid2$date, 4, 5)
+Data_date_covid<-ymd(paste(Data_year_covid,Data_month_covid,sep="-"),truncated = 1)
+
+df_covid0 <- data.frame(Date=Data_date_covid,
+                        Case=Data_covid2$daily_increasing_cases)
+num_case<-c()
+for (i in 1:2){
+  for (j in 1:12){
+    if(1<=j&j<=9){
+      num_case[12*(i-1)+j]<-sum(df_covid0[which(df_covid0$Date == 
+                                                  paste("20",(19+i),"-0",j,"-01",sep="")),'Case'])
+    }
+    if(10<=j&j<=12){
+      num_case[12*(i-1)+j]<-sum(df_covid0[which(df_covid0$Date == 
+                                                  paste("20",(19+i),"-",j,"-01",sep="")),'Case'])
+    }
+  }
+}
+
+df_covid <- data.frame(Date=ymd(Data_temperature2$date[92:106]),
+                       Case=num_case[2:16])
+#plot
+#Compare the number of collision with avg temperature (All data)
+g1<-ggplot(df) + geom_line(aes(x=Date,y=number),col="red") + theme_bw() + 
+  ylab("Number of collision")
+g2<-ggplot(df) + geom_line(aes(x=Date,y=Temperature_avg),col="blue") + theme_bw()
+grid.arrange(g1,g2,nrow = 2)
+
+
+
+```
+
+
+## Covid & Collision
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.align = "center"}
+
+#Compare the number of collision with covid case
+#Sys.setlocale("LC_TIME", "English")
+df_forcovid <- data.frame(Date=df$Date[92:106],
+                          number=df$number[92:106])
+g5<-ggplot(df_forcovid) + geom_line(aes(x=Date,y=number),col="red") + theme_bw() + 
+  ylab("Number of collision")
+g6<-ggplot(df_covid) + geom_line(aes(x=Date,y=Case),col="blue") + theme_bw() +
+  ylab("Number of Covid cases")
+grid.arrange(g5, g6,nrow = 2)
+
+
+```
+
+
+
+
+## Conclusion
+
+<ul>
+  <li>Vision Zero in NYC</li>
+  <li>Further points of study</li>
+  <ul>
+    <li>Infrastructure</li>
+    <li>Cyclist Infrastructure</li>
+    <li>Social Issues</li>
+  </ul>
+</ul>
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.height = 2.75, fig.width = 7.75}
+
+col_vec_3 <- c("#369eb3", "#00b0b5", "#00c0ac", "#3cce97", "#74da7b",
+               "#abe25c", "#e6e540")
+dat3 %>% 
+  filter(cause0 != "Unspecified") %>% 
+  mutate(is_kil = ifelse(per_kil != 0, 
+                         "yes", "no")) %>% 
+  group_by(cause0, is_kil) %>% 
+  count() %>% 
+  spread(key = is_kil, value = n) %>% 
+  mutate(perc = yes/sum(yes,no)) %>% 
+  ggplot() + 
+  aes(x = cause0, weight = perc, fill = cause0) + 
+  geom_bar() + 
+  scale_fill_manual(values = col_vec_3) + 
+  coord_flip() + 
+  labs(title = "Most Deadly Causes",
+       x = "Causes",
+       y = "Percentage of Deaths per Collision",
+       fill = "Causes")
+
+
+```
+
+
+# Thank you
+Group #6 Presentation
+
+
+
+author: X. Hu, S. Wang, X. Wang, B. Xu, J. Yu

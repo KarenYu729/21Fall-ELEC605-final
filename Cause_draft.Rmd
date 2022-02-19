@@ -1,0 +1,169 @@
+---
+title: "causeAnalysis"
+author: "Jiahui Yu"
+date: "11/21/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+```{r, echo=FALSE, message = FALSE, fig.align = "center", fig.height = 5, fig.width = 7.5}
+
+library(leaflet)
+library(mapview)
+library(png)
+library(ggplot2)
+library(stringr)
+library(tidyverse)
+library(sp)
+library(rgdal)
+library(RSQLite)
+library(grid)
+library(scales)
+
+
+setwd("C:/riceCourse/STAT_605_R_for_dataScien/TrafficData")
+dat3 <- read.csv("XYWdata/collision_final.csv")
+
+
+```
+
+## Overview
+
+Even though ‘cause1’ contains are 62 distinct cases, most of them can be categorized under some larger category. For the following analysis, we grouped the causes into the following eight categories:
+
+
+* Unspecified: Unspecified, , 80, 1
+
+
+* External Causes: Pavement Slippery, View Obstructed/Limited, Pavement Defective, Obstruction/Debris, Glare, Lane Marking Improper/Inadequate, Traffic Control Device Improper/Non-Working
+
+
+* Involuntary Causes (Vehicles): Brakes Defective, Steering Failure, Other Lighting Defects, Tire Failure/Inadequate, Accelerator Defective, Tow Hitch Defective, Headlights Defective, Tinted Windows, Windshield Inadequate, Shoulders Defective/Improper
+
+
+* Violating Traffic Rules: Following Too Closely, Passing Too Closely, Passing or Lane Usage Improper, Failure to Yield Right-of-Way, Turning Improperly, Unsafe Speed, Backing Unsafely, Traffic Control Disregarded, Aggressive Driving/Road Rage, Unsafe Lane Changing, Failure to Keep Right
+
+
+* Distraction/inattention: Driver Inattention/Distraction, Outside Car Distraction, Passenger Distraction, Eating or Drinking, Cell Phone (hands-free), Using On Board Navigation Device, Cell Phone (hand-Held), Listening/Using Headphones, Texting, Other Electronic Device, Cell Phone (hand-held)
+
+
+* Lost of/impair Motor Function: Drugs (illegal), Fell Asleep, Alcohol Involvement, Illnes, Lost Consciousness, Fatigued/Drowsy, Physical Disability, Prescription Medication, Drugs (Illegal), Illness
+
+
+* Third Party: Other Vehicular, Reaction to Uninvolved Vehicle, Pedestrian/Bicyclist/Other Pedestrian Error/Confusion, Animals Action, Vehicle Vandalism, Reaction to Other Uninvolved Vehicle
+
+
+* Others: Driver Inexperience, Oversized Vehicle, Driverless/Runaway Vehicle
+
+
+Because no extra information for "Unspecified" causes, so we discard it while analysing.
+
+
+
+```{r, echo=FALSE, message = FALSE, fig.align = "center", fig.height = 3, fig.width = 7.5}
+
+dat3 %>% 
+  filter(per_inj == pd_inj + m_inj + c_inj, 
+         per_kil == pd_kil + m_kil + c_kil,
+         cause0 != "Unspecified") %>% 
+  mutate(is_inj = ifelse(per_inj != 0 | per_kil != 0, 
+                         "Injuries/Deaths", "No Injuries/Deaths")) %>% 
+  group_by(cause0, is_inj) %>% 
+  count() %>% 
+  ggplot() + 
+  aes(x = cause0, weight = n, group = is_inj, fill = is_inj) %>% 
+  geom_bar() + 
+  labs(title = "Total Collisions in NYC by Cause",
+       x = "Causes",
+       y = "Number of Collisions",
+       fill = "Injuries/Death Occured?") + 
+  coord_flip()
+
+```
+In accordance with our common knowledge, "Violating Traffic Rules" and "Distraction/inattention" is on the top of the list of causes of traffic accidents. A lot of people will question it because getting a driver's license requires taking tests. In New York, getting a driver's license requires taking a written test (named "Get a learner permit") and a road test. Driving practice (named "Practice driving and take a pre-licensing course") is also required before taking the road test. Drivers are supposed to know the rules of the road and pay attention when driving on the road. But just as we all know to take our keys with us when we leave home, but sometimes we still forget them and our attention can be easily attracted by what happens around us, there is no guarantee that drivers will follow the instructions in their study manual all the time.
+
+
+
+
+
+## Most Dangerous Causes
+### Have serious consequences
+
+```{r, echo=FALSE, message = FALSE, fig.align = "center", fig.height = 3, fig.width = 7.5}
+dat3 %>% 
+  filter(per_inj == pd_inj + m_inj + c_inj, 
+         per_kil == pd_kil + m_kil + c_kil,
+         cause0 != "Unspecified") %>% 
+  mutate(is_inj = ifelse(per_inj != 0 | per_kil != 0, 
+                         "yes", "no")) %>% 
+  group_by(cause0, is_inj) %>% 
+  count() %>% 
+  spread(key = is_inj, value = n) %>% 
+  mutate(perc = yes/sum(yes,no)) %>% 
+  ggplot() + 
+  aes(x = cause0, weight = perc, fill = cause0) + 
+  geom_bar() + 
+  coord_flip() + 
+  labs(title = "Most Dangerous Causes",
+       x = "Causes",
+       y = "Percentage of Injuries/Deaths per Collision",
+       fill = "Causes")
+
+```
+If we take away collisions that don't cause serious damage (injury or death), what causes are more likely to cause crashes? The main causes of death and injury are often unrelated to the driver. The most common causes are "Involuntary Causes" and "External Causes". Although drivers are careful enough, defects in vehicle design or damage to vehicle components, emergencies on the road, or flaws in urban road planning can all lead to serious accidents. In New York, for example, the intersection of the 2nd Avenue and the Ed Koch Queensboro Bridge Lower Roadway is designed to be extremely complicated. If A driver passes by there for the first time, it is more likely to cause an accident because he is not familiar with the road conditions.
+
+
+### Have fatal consequences
+
+```{r, echo=FALSE, message = FALSE, fig.align = "center", fig.height = 3, fig.width = 7.5}
+dat3 %>% 
+  filter(per_inj == pd_inj + m_inj + c_inj, 
+         per_kil == pd_kil + m_kil + c_kil,
+         cause0 != "Unspecified") %>% 
+  mutate(is_kil = ifelse(per_kil != 0, 
+                         "yes", "no")) %>% 
+  group_by(cause0, is_kil) %>% 
+  count() %>% 
+  spread(key = is_kil, value = n) %>% 
+  mutate(perc = yes/sum(yes,no)) %>% 
+  ggplot() + 
+  aes(x = cause0, weight = perc, fill = cause0) + 
+  geom_bar() + 
+  coord_flip() + 
+  labs(title = "Most Deadly Causes",
+       x = "Causes",
+       y = "Percentage of Deaths per Collision",
+       fill = "Causes")
+
+
+```
+
+If killing or injuring someone is a serious consequence, killing someone in a car accident is an even deadlier consequence. Among the many reasons, Lost of/impair Motor Function is far ahead. When the driver loses control of the vehicle, it is difficult to estimate the severity of the accident. The reason that makes people unable to operate the car machine is often the reason of taking drugs, injecting drugs, drinking etc., which makes the driver's consciousness is not clear enough. However, the control of such items is often not very effective, and people's awareness in this area needs to be improved.
+
+
+
+## brief summary 
+
+Based on the previous classification of the causes of the accidents, we can analyze the death and injury caused by that cause. Violating Traffic Rules is the biggest cause of accidents. This may be because it is easier to get a driver’s license, and traffic laws and regulations are not perfect, so the punishment for violating traffic laws and regulations is not relatively deterrent. We will investigate further on the possibility
+of such underlying cause by comparing with some other secondary dataset(s).
+
+
+* Although Violating Traffic Rules and Distraction/inattention cause more accident,
+Involuntary causes are more likely to cause person injured or killed However, from the perspective of proportion, the proportion of casualties caused by this reason is similar in each accident, and there is no significant difference, which may be related to people’s common driving habits under the current traffic laws and vehicle design restrictions.
+
+
+* If we focus on the deaths rate from each car crash, Violating Traffic Rules, Distraction/inattention, and Involuntary Causes are not the main causes comparing to the cause Lost/impair Motor Function. If the vehicle is not out of control and the driver in the detection of abnormal driving, through manual operation, although the accident cannot be completely prevented, the number of people killed in the accident can probably be reduced.
+
+
+
+
+
+
+
+

@@ -1,0 +1,157 @@
+---
+title: "datasetProject"
+author: "Jiahui Yu"
+date: "10/5/2021"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+
+```{r, echo = TRUE, include = TRUE}
+collision_crash <- read.csv("C:/riceCourse/STAT_605_R_for_dataScien/TrafficData/Motor_Vehicle_Collisions_Crashes.csv")
+
+#summary(collision_crash)
+
+
+OriginalLength <- nrow(collision_crash)
+
+
+ProcessingFile <- subset(collision_crash, !((is.na(collision_crash$NUMBER.OF.PERSONS.INJURED))|
+                           (is.na(collision_crash$NUMBER.OF.PERSONS.KILLED))|
+                           (is.na(collision_crash$NUMBER.OF.PEDESTRIANS.INJURED))|
+                           (is.na(collision_crash$NUMBER.OF.PEDESTRIANS.KILLED))|
+                           (is.na(collision_crash$NUMBER.OF.CYCLIST.INJURED))|
+                           (is.na(collision_crash$NUMBER.OF.CYCLIST.KILLED))|
+                           (is.na(collision_crash$NUMBER.OF.MOTORIST.INJURED))|
+                           (is.na(collision_crash$NUMBER.OF.MOTORIST.KILLED))|
+                           (is.na(collision_crash$CONTRIBUTING.FACTOR.VEHICLE.1))|
+                           (is.na(collision_crash$CONTRIBUTING.FACTOR.VEHICLE.2))|
+                           (is.na(collision_crash$VEHICLE.TYPE.CODE.1))|
+                           (is.na(collision_crash$VEHICLE.TYPE.CODE.2))|
+                           (is.na(collision_crash$LONGITUDE))|
+                           (is.na(collision_crash$LATITUDE))|
+                           (is.na(collision_crash$ZIP.CODE))|
+                           (is.na(collision_crash$BOROUGH))|
+                           ((collision_crash$LONGITUDE == 0))|
+                           ((collision_crash$LATITUDE == 0))))
+
+barplot(height = c(sum(collision_crash$NUMBER.OF.PERSONS.KILLED), 
+                   sum(collision_crash$NUMBER.OF.CYCLIST.KILLED), 
+                   sum(collision_crash$NUMBER.OF.MOTORIST.KILLED), 
+                   sum(collision_crash$NUMBER.OF.PEDESTRIANS.INJURED)), 
+        xlab = "Total Number of people killed during Collision", ylab = "Numnber",
+        main = "Total numnber people killed in Crash, New York, 2016-2021",
+        legend.text = c("people", "cyclist", "motorist", "pedestrians"),
+        col = c("#ffcccc", "#ffcc66","#ccccff","#99cc99"),
+        args.legend=c(x=7.2,y=420963.7))
+
+
+#summary(ProcessingFile)
+
+CrashHappenMost <- data.frame(table(ProcessingFile$BOROUGH))
+
+
+barplot(height = CrashHappenMost$Freq, xlab = "BOROUGH", ylab = "total Crashes",
+        main = "Total Crashes in each Borough New York, 2016-2021",
+        legend.text = CrashHappenMost$Var1,
+        col = c("#ffcccc", "#ffcc66","#ccccff","#99cc99","#ff8800"),
+        args.legend=c(x=7.2,y=420963.7))
+
+
+
+
+ReasonCrash <- subset(collision_crash, !((is.na(collision_crash$CONTRIBUTING.FACTOR.VEHICLE.1))|
+                                        (is.na(collision_crash$CONTRIBUTING.FACTOR.VEHICLE.2))|
+                                        (is.na(collision_crash$VEHICLE.TYPE.CODE.1))|
+                                        (is.na(collision_crash$VEHICLE.TYPE.CODE.2))|
+                                        ((collision_crash$CONTRIBUTING.FACTOR.VEHICLE.1 == ""))|
+                                        ((collision_crash$CONTRIBUTING.FACTOR.VEHICLE.1 == 1))|
+                                        ((collision_crash$CONTRIBUTING.FACTOR.VEHICLE.1 == 80))|
+                                        ((collision_crash$CONTRIBUTING.FACTOR.VEHICLE.2 == ""))|
+                                        ((collision_crash$CONTRIBUTING.FACTOR.VEHICLE.2 == 1))|
+                                        ((collision_crash$CONTRIBUTING.FACTOR.VEHICLE.2 == 80))))
+
+#the number of rows of subsets that used for factor analysis
+TotalNum_Reason <- nrow(ReasonCrash)
+
+#factor1
+factorCrash1 <- as.data.frame(sort(table(ReasonCrash$CONTRIBUTING.FACTOR.VEHICLE.1),
+                                   decreasing= TRUE))
+
+#factor2
+factorCrash2 <- as.data.frame(sort(table(ReasonCrash$CONTRIBUTING.FACTOR.VEHICLE.2),
+                                   decreasing= TRUE))
+
+library(ggplot2)
+#plot factor1
+ggplot(head(factorCrash1), aes(x = "", y = Freq/TotalNum_Reason, fill = Var1)) +
+  labs(x = "Percentage of frequency of factor 1", y = "Factor1",
+       title = "Top reason causes Collisions" ) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(fill = "Top six factors") +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  scale_fill_brewer(palette="Dark2")
+
+#plot factor2
+ggplot(head(factorCrash2), aes(x = "", y = Freq/TotalNum_Reason, fill = Var1)) +
+  labs(x = "Percentage of frequency of factor 2", y = "Factor2",
+       title = "Top reason causes Collisions" ) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(fill = "Top six factors") +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  scale_fill_brewer(palette="Dark2")
+
+
+#map plotting
+#
+############
+
+location <- as.data.frame(table(ProcessingFile$LOCATION))
+location$Var1 <- gsub("\\(|\\)", "", location$Var1)
+
+## change data type & split latitude and longtitude
+library(tidyverse)
+temp1 <- separate(data = location, col = Var1, into = c("Latitude", "Longtitude"), sep = ", ")
+
+## using leaflet do map plotting
+library(leaflet)
+library(mapview)
+
+temp2 <- temp1[order(-temp1$Freq), ]
+
+longtitude <- c(as.numeric(temp2$Longtitude))
+latitude <- c(as.numeric(temp2$Latitude))
+labelPoint <- c(as.character(temp2$Freq))
+
+m <- leaflet()
+at <- addTiles(m)
+
+partPlot <- addCircles(at,lng=longtitude[1:150], 
+                       lat=latitude[1:150], popup = labelPoint[1:150],
+           color = "red",weight = 10)
+
+## store imag in png
+mapshot(partPlot, file = "C:/riceCourse/STAT_605_R_for_dataScien/TrafficData/Rplot.png")
+
+## open img
+library(png)
+imgpng <- readPNG("C:/riceCourse/STAT_605_R_for_dataScien/
+                  TrafficData/Rplot.png")
+r <- nrow(imgpng)/ncol(imgpng) 
+plot(c(0,1),c(0,r),type = "n",xlab = "",ylab = "",asp=1)
+rasterImage(imgpng,0,0,1,r)
+
+```
+
+
